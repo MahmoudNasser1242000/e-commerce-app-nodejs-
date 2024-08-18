@@ -1,5 +1,5 @@
 import {Router} from "express";
-import { addCategorey, getAllCategories } from "./category.controller.js";
+import { addCategorey, getAllCategories, getSpecificCategory } from "./category.controller.js";
 
 const categoryRouter = Router();
 
@@ -9,6 +9,11 @@ categoryRouter.route("/")
     )
     .get(
         getAllCategories
+    )
+
+categoryRouter.route("/:categoryId")
+    .get(
+        getSpecificCategory
     )
 
 export default categoryRouter;
