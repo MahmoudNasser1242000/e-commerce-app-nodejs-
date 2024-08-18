@@ -21,8 +21,21 @@ const getSpecificCategory = errorAsyncHandler(async (req, res, next) => {
     res.status(201).json({category});
 })
 
+const updateCategory = errorAsyncHandler(async (req, res, next) => {
+    const {categoryId} = req.params;
+    const {name} = req.body;
+    if (name) 
+        req.body.slug = slugify(name)
+
+    const category = await categoryModel.findByIdAndUpdate({_id: categoryId}, {...req.body});
+    if (!category) 
+        return next(new AppError("Cant not find category with this id", 400))
+    res.status(201).json({msg: "Category updated successfully", category});
+})
+
 export {
     addCategorey,
     getAllCategories,
     getSpecificCategory,
+    updateCategory
 }
