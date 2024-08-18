@@ -3,6 +3,7 @@ import AppError from "./utils/errorClass.js";
 import dbconnection from "./database/dbConnection.js";
 import Bootstrap from "./src/bootstrap.js";
 const app = express();
+app.use(express.json())
 
 Bootstrap(app)
 
