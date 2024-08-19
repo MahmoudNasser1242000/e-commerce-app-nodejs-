@@ -11,14 +11,14 @@ const addCategorey = errorAsyncHandler(async (req, res, next) => {
 
 const getAllCategories = errorAsyncHandler(async (req, res, next) => {
     const categories = await categoryModel.find({});
-    res.status(201).json({categories});
+    res.status(200).json({categories});
 })
 
 const getSpecificCategory = errorAsyncHandler(async (req, res, next) => {
     const category = await categoryModel.findById(req.params.categoryId);
     if (!category) 
         return next(new AppError("Cant not find category with this id", 400))
-    res.status(201).json({category});
+    res.status(200).json({category});
 })
 
 const updateCategory = errorAsyncHandler(async (req, res, next) => {
@@ -30,15 +30,15 @@ const updateCategory = errorAsyncHandler(async (req, res, next) => {
     const category = await categoryModel.findByIdAndUpdate({_id: categoryId}, {...req.body}, {new: true});
     if (!category) 
         return next(new AppError("Cant not find category with this id", 400))
-    res.status(201).json({msg: "Category updated successfully", category});
+    res.status(202).json({msg: "Category updated successfully", category});
 })
 
 const deleteCategory = errorAsyncHandler(async (req, res, next) => {
     const {categoryId} = req.params;
-    const category = await categoryModel.findByIdAndUpdate({_id: categoryId});
+    const category = await categoryModel.findByIdAndDelete({_id: categoryId});
     if (!category) 
         return next(new AppError("Cant not find category with this id", 400))
-    res.status(201).json({msg: "Category deleted successfully", category});
+    res.status(202).json({msg: "Category deleted successfully", category});
 })
 
 export {
