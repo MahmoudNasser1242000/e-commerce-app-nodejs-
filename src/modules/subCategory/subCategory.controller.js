@@ -22,8 +22,21 @@ const getSpecificSubCategory = errorAsyncHandler(async (req, res, next) => {
     res.status(200).json({subCategory});
 })
 
+const updateSubCategory = errorAsyncHandler(async (req, res, next) => {
+    const {subCategoryId} = req.params;
+    const {name} = req.body;
+    if (name) 
+        req.body.slug = slugify(name)
+
+    const subCategory = await subCategoryModel.findByIdAndUpdate({_id: subCategoryId}, {...req.body}, {new: true});
+    if (!subCategory) 
+        return next(new AppError("Cant not find subCategory with this id", 400))
+    res.status(202).json({msg: "SubCategory updated successfully", subCategory});
+})
+
 export {
     addSubCategorey,
     getAllSubCategories,
     getSpecificSubCategory,
+    updateSubCategory
 }
