@@ -34,9 +34,18 @@ const updateSubCategory = errorAsyncHandler(async (req, res, next) => {
     res.status(202).json({msg: "SubCategory updated successfully", subCategory});
 })
 
+const deleteSubCategory = errorAsyncHandler(async (req, res, next) => {
+    const {subCategoryId} = req.params;
+    const subCategory = await subCategoryModel.findByIdAndDelete({_id: subCategoryId});
+    if (!subCategory) 
+        return next(new AppError("Cant not find subCategory with this id", 400))
+    res.status(202).json({msg: "SubCategory deleted successfully", subCategory});
+})
+
 export {
     addSubCategorey,
     getAllSubCategories,
     getSpecificSubCategory,
-    updateSubCategory
+    updateSubCategory,
+    deleteSubCategory
 }
