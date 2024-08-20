@@ -1,5 +1,5 @@
 import {Router} from "express";
-import { addBrand, getAllBrands, getSpecificBrand, updateBrand } from "./brand.controller.js";
+import { addBrand, deleteBrand, getAllBrands, getSpecificBrand, updateBrand } from "./brand.controller.js";
 
 const brandRouter = Router();
 
@@ -17,5 +17,8 @@ brandRouter.route("/:brandId")
     )
     .patch(
         updateBrand
+    )
+    .delete(
+        deleteBrand
     )
 export default brandRouter;

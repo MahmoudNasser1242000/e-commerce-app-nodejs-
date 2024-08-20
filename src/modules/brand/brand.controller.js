@@ -33,9 +33,18 @@ const updateBrand = errorAsyncHandler(async (req, res, next) => {
     res.status(202).json({msg: "Brand updated successfully", brand});
 })
 
+const deleteBrand = errorAsyncHandler(async (req, res, next) => {
+    const {brandId} = req.params;
+    const brand = await brandModel.findByIdAndDelete({_id: brandId});
+    if (!brand) 
+        return next(new AppError("Cant not find brand with this id", 400))
+    res.status(202).json({msg: "Brand deleted successfully", brand});
+})
+
 export {
     addBrand,
     getAllBrands,
     getSpecificBrand,
-    updateBrand
+    updateBrand,
+    deleteBrand
 }
