@@ -1,5 +1,5 @@
 import {Router} from "express";
-import { addBrand, getAllBrands } from "./brand.controller.js";
+import { addBrand, getAllBrands, getSpecificBrand } from "./brand.controller.js";
 
 const brandRouter = Router();
 
@@ -9,5 +9,10 @@ brandRouter.route("/")
     )
     .get(
         getAllBrands
+    )
+
+brandRouter.route("/:brandId")
+    .get(
+        getSpecificBrand
     )
 export default brandRouter;

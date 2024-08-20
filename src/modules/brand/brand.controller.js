@@ -1,6 +1,7 @@
 import slugify from "slugify";
 import errorAsyncHandler from "../../../services/errorAsyncHandler.js";
 import brandModel from "../../../database/models/brand.model.js";
+import AppError from "../../../utils/errorClass.js";
 
 const addBrand = errorAsyncHandler(async (req, res, next) => {
     req.body.slug = slugify(req.body.name)
@@ -13,7 +14,15 @@ const getAllBrands = errorAsyncHandler(async (req, res, next) => {
     res.status(200).json({brands});
 })
 
+const getSpecificBrand = errorAsyncHandler(async (req, res, next) => {
+    const brand = await brandModel.findById(req.params.brandId);
+    if (!brand) 
+        return next(new AppError("Cant not find brand with this id", 400))
+    res.status(200).json({brand});
+})
+
 export {
     addBrand,
-    getAllBrands
+    getAllBrands,
+    getSpecificBrand
 }
