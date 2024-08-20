@@ -21,8 +21,21 @@ const getSpecificBrand = errorAsyncHandler(async (req, res, next) => {
     res.status(200).json({brand});
 })
 
+const updateBrand = errorAsyncHandler(async (req, res, next) => {
+    const {brandId} = req.params;
+    const {name} = req.body;
+    if (name) 
+        req.body.slug = slugify(name)
+
+    const brand = await brandModel.findByIdAndUpdate({_id: brandId}, {...req.body}, {new: true});
+    if (!brand) 
+        return next(new AppError("Cant not find brand with this id", 400))
+    res.status(202).json({msg: "Brand updated successfully", brand});
+})
+
 export {
     addBrand,
     getAllBrands,
-    getSpecificBrand
+    getSpecificBrand,
+    updateBrand
 }
