@@ -8,6 +8,12 @@ const addBrand = errorAsyncHandler(async (req, res, next) => {
     res.status(201).json({msg: "Brand added successfully", brand});
 })
 
+const getAllBrands = errorAsyncHandler(async (req, res, next) => {
+    const brands = await brandModel.find({});
+    res.status(200).json({brands});
+})
+
 export {
     addBrand,
+    getAllBrands
 }
