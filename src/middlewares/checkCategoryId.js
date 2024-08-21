@@ -2,7 +2,7 @@ import categoryModel from "../../database/models/category.model.js";
 import errorAsyncHandler from "../../services/errorAsyncHandler.js";
 
 const checkCategoryId = errorAsyncHandler(async (req, res, next) => {
-    const {categoryId} = req.params
+    const {categoryId} = req.body
     const category = await categoryModel.findById(categoryId);
 
     if (!category) 
