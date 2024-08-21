@@ -34,9 +34,18 @@ const updateProduct = errorAsyncHandler(async (req, res, next) => {
     res.status(202).json({msg: "Product updated successfully", product});
 })
 
+const deleteProduct = errorAsyncHandler(async (req, res, next) => {
+    const {productId} = req.params;
+    const product = await productModel.findByIdAndDelete({_id: productId});
+    if (!product) 
+        return next(new AppError("Cant not find product with this id", 400))
+    res.status(202).json({msg: "Product deleted successfully", product});
+})
+
 export {
     addProduct,
     getAllProducts,
     getSpecificProduct,
-    updateProduct
+    updateProduct,
+    deleteProduct
 };
