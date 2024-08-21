@@ -10,6 +10,12 @@ const addProduct = errorAsyncHandler(async (req, res, next) => {
     res.status(201).json({ msg: "Product added successfully", product });
 });
 
+const getAllProducts = errorAsyncHandler(async (req, res, next) => {
+    const products = await productModel.find({});
+    res.status(200).json({products});
+})
+
 export {
     addProduct,
+    getAllProducts
 };
