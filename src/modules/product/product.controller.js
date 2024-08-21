@@ -23,8 +23,20 @@ const getSpecificProduct = errorAsyncHandler(async (req, res, next) => {
     res.status(200).json({product});
 })
 
+const updateProduct = errorAsyncHandler(async (req, res, next) => {
+    const {productId} = req.params;
+    const {title} = req.body;
+    if (title) 
+        req.body.slug = slugify(title)
+    const product = await productModel.findByIdAndUpdate({_id: productId}, {...req.body}, {new: true});
+    if (!product) 
+        return next(new AppError("Cant not find product with this id", 400))
+    res.status(202).json({msg: "Product updated successfully", product});
+})
+
 export {
     addProduct,
     getAllProducts,
-    getSpecificProduct
+    getSpecificProduct,
+    updateProduct
 };

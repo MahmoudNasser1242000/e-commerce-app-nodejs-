@@ -1,5 +1,5 @@
 import {Router} from "express";
-import { addProduct, getSpecificProduct, getAllProducts } from "./product.controller.js";
+import { addProduct, getSpecificProduct, getAllProducts, updateProduct } from "./product.controller.js";
 import checkCategoryId from "../../middlewares/checkCategoryId.js";
 import checkSubCategory from "../../middlewares/checkSubCategory.js";
 import checkBrandId from "../../middlewares/checkBrandId.js";
@@ -20,6 +20,12 @@ productRouter.route("/")
 productRouter.route("/:productId")
     .get(
         getSpecificProduct
+    )
+    .patch(
+        checkCategoryId,
+        checkSubCategory,
+        checkBrandId,
+        updateProduct
     )
 
 export default productRouter;

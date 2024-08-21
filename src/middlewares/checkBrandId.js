@@ -5,7 +5,7 @@ const checkBrandId = errorAsyncHandler(async (req, res, next) => {
     const {brandId} = req.body
     const brand = await brandModel.findById(brandId);
 
-    if (!brand) 
+    if (brandId && !brand) 
         return res.status(400).json({msg: "Can not find brand with this id"});
     next()
 })
