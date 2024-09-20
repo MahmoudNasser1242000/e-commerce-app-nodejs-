@@ -3,6 +3,7 @@ import { addProduct, getSpecificProduct, getAllProducts, updateProduct, deletePr
 import checkCategoryId from "../../middlewares/checkCategoryId.js";
 import checkSubCategory from "../../middlewares/checkSubCategory.js";
 import checkBrandId from "../../middlewares/checkBrandId.js";
+import { uploadSingle } from "../../../utils/filesUpload.js";
 
 const productRouter = Router();
 
@@ -11,6 +12,7 @@ productRouter.route("/")
         checkCategoryId,
         checkSubCategory,
         checkBrandId,
+        uploadSingle("imgCover"),
         addProduct
     )
     .get(

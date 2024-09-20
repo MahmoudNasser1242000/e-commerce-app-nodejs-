@@ -5,6 +5,8 @@ import AppError from "../../../utils/errorClass.js";
 
 const addProduct = errorAsyncHandler(async (req, res, next) => {
     req.body.slug = slugify(req.body.title);
+    if (req.file)
+        req.body.imgCover = req.file.filename
     const product = await productModel.insertMany({
         ...req.body,
     });

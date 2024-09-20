@@ -18,5 +18,9 @@ const brandSchema = new Schema({
     logo: String,
 });
 
+brandSchema.post("insertMany", (doc) => {
+    doc[0].logo = "http://localhost:3000/uploads/" + doc[0].logo
+})
+
 const brandModel = mongoose.model('Brand', brandSchema);
 export default brandModel

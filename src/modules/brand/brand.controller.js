@@ -5,6 +5,8 @@ import AppError from "../../../utils/errorClass.js";
 
 const addBrand = errorAsyncHandler(async (req, res, next) => {
     req.body.slug = slugify(req.body.name)
+    if (req.file)
+        req.body.logo = req.file.filename
     const brand = await brandModel.insertMany(req.body);
     res.status(201).json({msg: "Brand added successfully", brand});
 })

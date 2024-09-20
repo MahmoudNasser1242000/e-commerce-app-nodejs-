@@ -61,5 +61,9 @@ const productSchema = new Schema({
     },
 });
 
+productSchema.post("insertMany", (doc) => {
+    doc[0].imgCover = "http://localhost:3000/uploads/" + doc[0].imgCover
+})
+
 const productModel = mongoose.model('Product', productSchema);
 export default productModel

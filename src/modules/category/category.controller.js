@@ -5,6 +5,8 @@ import AppError from "../../../utils/errorClass.js";
 
 const addCategorey = errorAsyncHandler(async (req, res, next) => {
     req.body.slug = slugify(req.body.name)
+    if (req.file)
+        req.body.img = req.file.filename
     const category = await categoryModel.insertMany(req.body);
     res.status(201).json({msg: "Category added successfully", category});
 })

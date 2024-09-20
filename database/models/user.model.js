@@ -18,6 +18,7 @@ const userSchema = new Schema({
         type: String,
         required: true, 
     },
+    profileImg: String,
     role: {
         type: String,
         enum: ["user", "admin"],
@@ -33,6 +34,10 @@ const userSchema = new Schema({
     },
     // profile: String,
 });
+
+userSchema.post("insertMany", (doc) => {
+    doc[0].profileImg = "http://localhost:3000/uploads/" + doc[0].profileImg
+})
 
 const userModel = mongoose.model('User', userSchema);
 export default userModel

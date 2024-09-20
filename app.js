@@ -4,6 +4,7 @@ import dbconnection from "./database/dbConnection.js";
 import Bootstrap from "./src/bootstrap.js";
 const app = express();
 app.use(express.json())
+app.use("/uploads", express.static("./uploads"))
 
 Bootstrap(app)
 
