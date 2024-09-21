@@ -13,12 +13,12 @@ const reviewSchema = new Schema({
         max: 5,
         required: true, 
     },
-    userId: {
+    user: {
         type: Schema.Types.ObjectId, 
         ref: "User", 
         required: true
     },
-    productId: {
+    product: {
         type: Schema.Types.ObjectId, 
         ref: "Product", 
         required: true
