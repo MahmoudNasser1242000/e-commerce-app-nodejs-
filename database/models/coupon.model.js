@@ -4,8 +4,10 @@ const { Schema } = mongoose;
 const couponSchema = new Schema({
     code: {
         type: String,
+        minLength: [3, "Coupon code must be at least 5 characters"],
         trim: true,
         required: true,
+        unique: [true, "Code must be unique"]
     },
     expire: Date,
     discount: {
@@ -23,11 +25,16 @@ const couponSchema = new Schema({
         enum: ["active", "inActive"],
         default: "inActive", 
     },
-    productId: {
+    product: {
         type: Schema.Types.ObjectId, 
         ref: "Product", 
         required: true
     },
+    admin: {
+        type: Schema.Types.ObjectId, 
+        ref: "User", 
+        required: true
+    }
 });
 
 const couponModel = mongoose.model('Coupon', couponSchema);
