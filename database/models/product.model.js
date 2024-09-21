@@ -32,7 +32,11 @@ const productSchema = new Schema({
         type: Number,
         min: 0,
     },
-    sold: Number,
+    sold: {
+        type: Number,
+        min: 0,
+        default: 0
+    },
     stock: {
         type: Number,
         min: 0,
@@ -44,25 +48,26 @@ const productSchema = new Schema({
         min: 0,
         max: 5,
     },
-    categoryId: {
+    category: {
         type: Schema.Types.ObjectId, 
         ref: "Category", 
         required: true
     },
-    subCategoryId: {
+    subCategory: {
         type: Schema.Types.ObjectId, 
         ref: "SubCategory", 
         required: true
     },
-    brandId: {
+    brand: {
         type: Schema.Types.ObjectId, 
         ref: "Brand", 
         required: true
     },
 });
 
-productSchema.post("insertMany", (doc) => {
-    doc[0].imgCover = "http://localhost:3000/uploads/" + doc[0].imgCover
+productSchema.pre("save", function (next) {
+    this.imgCover = "http://localhost:3000/uploads/" + this.imgCover
+    next()
 })
 
 const productModel = mongoose.model('Product', productSchema);

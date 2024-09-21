@@ -29,6 +29,8 @@ const updateCategory = errorAsyncHandler(async (req, res, next) => {
     if (name) 
         req.body.slug = slugify(name)
 
+    if (req.file)
+        req.body.img = req.file.filename
     const category = await categoryModel.findByIdAndUpdate({_id: categoryId}, {...req.body}, {new: true});
     if (!category) 
         return next(new AppError("Cant not find category with this id", 400))

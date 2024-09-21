@@ -35,8 +35,9 @@ const userSchema = new Schema({
     // profile: String,
 });
 
-userSchema.post("insertMany", (doc) => {
-    doc[0].profileImg = "http://localhost:3000/uploads/" + doc[0].profileImg
+userSchema.pre("save", function (next) {
+    this.profileImg = "http://localhost:3000/uploads/" + this.profileImg
+    next()
 })
 
 const userModel = mongoose.model('User', userSchema);

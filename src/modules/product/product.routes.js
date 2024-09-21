@@ -4,6 +4,8 @@ import checkCategoryId from "../../middlewares/checkCategoryId.js";
 import checkSubCategory from "../../middlewares/checkSubCategory.js";
 import checkBrandId from "../../middlewares/checkBrandId.js";
 import { uploadSingle } from "../../../utils/filesUpload.js";
+import schemaValidation from "../../../utils/schemaValidation.js";
+import { addProductSchema, updateProductSchema } from "./product.validation.js";
 
 const productRouter = Router();
 
@@ -13,6 +15,7 @@ productRouter.route("/")
         checkSubCategory,
         checkBrandId,
         uploadSingle("imgCover"),
+        schemaValidation(addProductSchema),
         addProduct
     )
     .get(
@@ -27,6 +30,8 @@ productRouter.route("/:productId")
         checkCategoryId,
         checkSubCategory,
         checkBrandId,
+        uploadSingle("imgCover"),
+        schemaValidation(updateProductSchema),
         updateProduct
     )
     .delete(

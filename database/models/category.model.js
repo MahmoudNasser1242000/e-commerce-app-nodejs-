@@ -18,8 +18,9 @@ const categorySchema = new Schema({
     img: String,
 });
 
-categorySchema.post("insertMany", (doc) => {
-    doc[0].img = "http://localhost:3000/uploads/" + doc[0].img
+categorySchema.pre("save", function (next) {
+    this.img = "http://localhost:3000/uploads/" + this.img
+    next()
 })
 
 const categoryModel = mongoose.model('Category', categorySchema);

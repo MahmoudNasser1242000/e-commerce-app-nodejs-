@@ -7,7 +7,8 @@ const addBrand = errorAsyncHandler(async (req, res, next) => {
     req.body.slug = slugify(req.body.name)
     if (req.file)
         req.body.logo = req.file.filename
-    const brand = await brandModel.insertMany(req.body);
+    const addBrand = new brandModel({...req.body})
+    const brand = await addBrand.save();
     res.status(201).json({msg: "Brand added successfully", brand});
 })
 
@@ -29,6 +30,8 @@ const updateBrand = errorAsyncHandler(async (req, res, next) => {
     if (name) 
         req.body.slug = slugify(name)
 
+    if (req.file)
+        req.body.logo = req.file.filename
     const brand = await brandModel.findByIdAndUpdate({_id: brandId}, {...req.body}, {new: true});
     if (!brand) 
         return next(new AppError("Cant not find brand with this id", 400))

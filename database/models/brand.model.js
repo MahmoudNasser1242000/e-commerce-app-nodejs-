@@ -16,10 +16,11 @@ const brandSchema = new Schema({
         required: true, 
     },
     logo: String,
-});
+}, {timestamps: true});
 
-brandSchema.post("insertMany", (doc) => {
-    doc[0].logo = "http://localhost:3000/uploads/" + doc[0].logo
+brandSchema.pre("save", function (next) {
+    this.logo = "http://localhost:3000/uploads/" + this.logo
+    next()
 })
 
 const brandModel = mongoose.model('Brand', brandSchema);

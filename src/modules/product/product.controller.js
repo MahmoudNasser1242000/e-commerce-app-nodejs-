@@ -30,6 +30,9 @@ const updateProduct = errorAsyncHandler(async (req, res, next) => {
     const {title} = req.body;
     if (title) 
         req.body.slug = slugify(title)
+
+    if (req.file)
+        req.body.imgCover = req.file.filename
     const product = await productModel.findByIdAndUpdate({_id: productId}, {...req.body}, {new: true});
     if (!product) 
         return next(new AppError("Cant not find product with this id", 400))
