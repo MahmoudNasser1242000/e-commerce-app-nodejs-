@@ -41,21 +41,6 @@ const addProductSchema = Joi.object({
             "string.min": "stocked products must be at least 0 product"
         }),
 
-    rateCount: Joi.number()
-        .required(),
-
-    rateAvg: Joi.number()
-        .required(),
-
-    rate: Joi.number()
-        .min(0)
-        .min(5)
-        .required()
-        .messages({
-            "string.min": "Product rate must be at least 0",
-            "string.max": "Product rate must be at most 5"
-        }),
-
     category: Joi.string().hex().length(24).required(),
     subCategory: Joi.string().hex().length(24).required(),
     brand: Joi.string().hex().length(24).required(),
@@ -73,6 +58,7 @@ const addProductSchema = Joi.object({
 })
 
 const updateProductSchema = Joi.object({
+    productId: Joi.string().hex().length(24).required(),
     name: Joi.string()
         .min(3)
         .optional()
@@ -115,21 +101,6 @@ const updateProductSchema = Joi.object({
             "string.min": "stocked products must be at least 0 product"
         }),
 
-    rateCount: Joi.number()
-        .optional(),
-
-    rateAvg: Joi.number()
-        .optional(),
-
-    rate: Joi.number()
-        .min(0)
-        .min(5)
-        .optional()
-        .messages({
-            "string.min": "Product rate must be at least 0",
-            "string.max": "Product rate must be at most 5"
-        }),
-
     category: Joi.string().hex().length(24).optional(),
     subCategory: Joi.string().hex().length(24).optional(),
     brand: Joi.string().hex().length(24).optional(),
@@ -146,7 +117,12 @@ const updateProductSchema = Joi.object({
     }).optional()
 })
 
+const productIdSchema = Joi.object({
+    productId: Joi.string().hex().length(24).required(),
+})
+
 export {
     addProductSchema,
-    updateProductSchema
+    updateProductSchema,
+    productIdSchema
 }

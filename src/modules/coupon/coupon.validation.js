@@ -31,6 +31,7 @@ const addCouponSchema = Joi.object({
 })
 
 const updateCouponSchema = Joi.object({
+    couponId: Joi.string().hex().length(24).required(),
     code: Joi.string()
         .min(5)
         .optional()
@@ -65,7 +66,12 @@ const updateCouponSchema = Joi.object({
     admin: Joi.string().hex().length(24).optional(),
 })
 
+const couponIdSchema = Joi.object({
+    couponId: Joi.string().hex().length(24).required(),
+})
+
 export {
     addCouponSchema,
-    updateCouponSchema
+    updateCouponSchema,
+    couponIdSchema
 }

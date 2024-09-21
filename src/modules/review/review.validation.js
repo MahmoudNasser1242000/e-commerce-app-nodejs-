@@ -21,6 +21,7 @@ const addReviewSchema = Joi.object({
 })
 
 const updateReviewSchema = Joi.object({
+    reviewId: Joi.string().hex().length(24).required(),
     comment: Joi.string()
         .min(3)
         .messages({
@@ -41,7 +42,12 @@ const updateReviewSchema = Joi.object({
     user: Joi.string().hex().length(24).optional(),
 })
 
+const reviewIdSchema = Joi.object({
+    reviewId: Joi.string().hex().length(24).required(),
+})
+
 export {
     addReviewSchema,
-    updateReviewSchema
+    updateReviewSchema,
+    reviewIdSchema
 }

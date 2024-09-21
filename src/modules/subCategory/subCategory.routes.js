@@ -2,7 +2,7 @@ import {Router} from "express";
 import { addSubCategorey, deleteSubCategory, getAllSubCategories, getSpecificSubCategory, updateSubCategory } from "./subCategory.controller.js";
 import checkCategoryId from "../../middlewares/checkCategoryId.js";
 import schemaValidation from "../../../utils/schemaValidation.js";
-import { addSubCategorySchema, updateSubCategorySchema } from "./subCategory.validation.js";
+import { addSubCategorySchema, subCategoryIdSchema, updateSubCategorySchema } from "./subCategory.validation.js";
 
 const subCategoryRouter = Router();
 
@@ -12,6 +12,7 @@ subCategoryRouter.post("/:categoryId", checkCategoryId, schemaValidation(addSubC
 
 subCategoryRouter.route("/:subCategoryId")
     .get(
+        schemaValidation(subCategoryIdSchema),
         getSpecificSubCategory
     )
     .patch(
@@ -19,6 +20,7 @@ subCategoryRouter.route("/:subCategoryId")
         updateSubCategory
     )
     .delete(
+        schemaValidation(subCategoryIdSchema),
         deleteSubCategory
     )
 

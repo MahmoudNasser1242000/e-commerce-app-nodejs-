@@ -10,6 +10,7 @@ const addSubCategorySchema = Joi.object({
 })
 
 const updateSubCategorySchema = Joi.object({
+    subCategoryId: Joi.string().hex().length(24).required(),
     name: Joi.string()
         .min(3)
         .optional()
@@ -18,7 +19,12 @@ const updateSubCategorySchema = Joi.object({
         }),
 })
 
+const subCategoryIdSchema = Joi.object({
+    subCategoryId: Joi.string().hex().length(24).required(),
+})
+
 export {
     addSubCategorySchema,
-    updateSubCategorySchema
+    updateSubCategorySchema,
+    subCategoryIdSchema
 }
