@@ -23,5 +23,9 @@ brandSchema.pre("save", function (next) {
     next()
 })
 
+brandSchema.post("init", function (doc) {
+    doc.logo = "http://localhost:3000/uploads/" + doc.logo
+})
+
 const brandModel = mongoose.model('Brand', brandSchema);
 export default brandModel

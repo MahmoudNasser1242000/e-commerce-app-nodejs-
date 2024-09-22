@@ -8,7 +8,7 @@ const addBrandSchema = Joi.object({
             "string.min": "Brand name must be at least 3 characters"
         }),
 
-    files: Joi.object({
+    file: Joi.object({
         fieldname: Joi.string().required(),
         originalname: Joi.string().required(),
         encoding: Joi.string().required(),
@@ -29,7 +29,7 @@ const updateBrandSchema = Joi.object({
             "string.min": "Brand name must be at least 3 characters"
         }),
 
-    files: Joi.object({
+    file: Joi.object({
         fieldname: Joi.string().required(),
         originalname: Joi.string().required(),
         encoding: Joi.string().required(),

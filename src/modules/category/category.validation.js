@@ -8,7 +8,7 @@ const addCategorySchema = Joi.object({
             "string.min": "Category name must be at least 3 characters"
         }),
 
-    files: Joi.object({
+    file: Joi.object({
         fieldname: Joi.string().required(),
         originalname: Joi.string().required(),
         encoding: Joi.string().required(),
@@ -29,7 +29,7 @@ const updateCategorySchema = Joi.object({
             "string.min": "Category name must be at least 3 characters"
         }),
 
-    files: Joi.object({
+    file: Joi.object({
         fieldname: Joi.string().required(),
         originalname: Joi.string().required(),
         encoding: Joi.string().required(),

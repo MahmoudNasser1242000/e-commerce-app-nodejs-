@@ -5,11 +5,12 @@ import AppError from "../../../utils/errorClass.js";
 
 const addProduct = errorAsyncHandler(async (req, res, next) => {
     req.body.slug = slugify(req.body.title);
-    if (req.file)
-        req.body.imgCover = req.file.filename
-    const product = await productModel.insertMany({
-        ...req.body,
-    });
+    if (req.files)
+        req.body.imgCover = req.files.imgCover[0].filename
+        req.body.images = req.files.images.map((img) => img.filename)
+
+    const addProduct = new productModel(req.body);
+    const product = await addProduct.save()
     res.status(201).json({ msg: "Product added successfully", product });
 });
 
@@ -31,8 +32,11 @@ const updateProduct = errorAsyncHandler(async (req, res, next) => {
     if (title) 
         req.body.slug = slugify(title)
 
-    if (req.file)
-        req.body.imgCover = req.file.filename
+    if (req.files.imgCover)
+        req.body.imgCover = req.files.imgCover[0].filename
+    if (req.files.images)
+        req.body.images = req.files.images.map((img) => img.filename)
+        
     const product = await productModel.findByIdAndUpdate({_id: productId}, {...req.body}, {new: true});
     if (!product) 
         return next(new AppError("Cant not find product with this id", 400))

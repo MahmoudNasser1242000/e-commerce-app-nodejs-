@@ -3,10 +3,12 @@ import AppError from "./errorClass.js"
 const schemaValidation = (schema) => {
     return (req, res, next) => {
         let inputData;
-        if (req.file || req.files) {
-            inputData = {files: req.files? req.files : req.file, ...req.body, ...req.param, ...req.query}
+        if (req.file) {
+            inputData = {file: req.file, ...req.body, ...req.params, ...req.query}
+        } else if (req.files) {
+            inputData = {...req.files, ...req.body, ...req.params, ...req.query}
         } else {
-            inputData = {...req.body, ...req.param, ...req.query}
+            inputData = {...req.body, ...req.params, ...req.query}
         }
         const {error} = schema.validate(inputData, {abortEarly: false})
         if (error) {

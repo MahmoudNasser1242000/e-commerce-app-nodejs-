@@ -66,8 +66,15 @@ const productSchema = new Schema({
 });
 
 productSchema.pre("save", function (next) {
+    console.log(this);
     this.imgCover = "http://localhost:3000/uploads/" + this.imgCover
+    this.images = this.images.map((img) => "http://localhost:3000/uploads/" + img)
     next()
+})
+
+productSchema.post("init", function (doc) {
+    doc.imgCover = "http://localhost:3000/uploads/" + doc.imgCover
+    doc.images = doc.images.map((img) => "http://localhost:3000/uploads/" + img)
 })
 
 const productModel = mongoose.model('Product', productSchema);

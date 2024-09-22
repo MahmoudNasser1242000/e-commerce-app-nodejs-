@@ -3,7 +3,7 @@ import { addProduct, getSpecificProduct, getAllProducts, updateProduct, deletePr
 import checkCategoryId from "../../middlewares/checkCategoryId.js";
 import checkSubCategory from "../../middlewares/checkSubCategory.js";
 import checkBrandId from "../../middlewares/checkBrandId.js";
-import { uploadSingle } from "../../../utils/filesUpload.js";
+import { uploadFields } from "../../../utils/filesUpload.js";
 import schemaValidation from "../../../utils/schemaValidation.js";
 import { addProductSchema, productIdSchema, updateProductSchema } from "./product.validation.js";
 
@@ -14,7 +14,7 @@ productRouter.route("/")
         checkCategoryId,
         checkSubCategory,
         checkBrandId,
-        uploadSingle("imgCover"),
+        uploadFields([{name: "imgCover", maxCount: 1}, {name: "images", maxCount: 8}]),
         schemaValidation(addProductSchema),
         addProduct
     )
@@ -31,7 +31,7 @@ productRouter.route("/:productId")
         checkCategoryId,
         checkSubCategory,
         checkBrandId,
-        uploadSingle("imgCover"),
+        uploadFields([{name: "imgCover", maxCount: 1}, {name: "images", maxCount: 8}]),
         schemaValidation(updateProductSchema),
         updateProduct
     )
