@@ -23,7 +23,7 @@ categorySchema.pre("save", function (next) {
     next()
 })
 
-productSchema.post("init", function (doc) {
+categorySchema.post("init", function (doc) {
     doc.img = "http://localhost:3000/uploads/" + doc.img
 })
 
