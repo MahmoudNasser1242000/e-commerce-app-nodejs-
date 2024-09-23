@@ -1,10 +1,10 @@
 class ApiFeatures {
-    constructor (mongooseQuery, queryString) {
+    constructor(mongooseQuery, queryString) {
         this.mongooseQuery = mongooseQuery;
         this.queryString = queryString
     }
 
-    pagination () {
+    pagination() {
         let page = +this.queryString.page || 1;
         if (page <= 0) page = 1;
         this.page = page
@@ -16,8 +16,8 @@ class ApiFeatures {
         return this
     }
 
-    filter () {
-        let filterObj = {...this.queryString};
+    filter() {
+        let filterObj = { ...this.queryString };
         const excutedQueries = ["page", "keyword", "sort", "fields"];
         excutedQueries.forEach((query) => delete filterObj[query]);
 
@@ -28,6 +28,15 @@ class ApiFeatures {
         this.mongooseQuery.find(filterObj)
         return this
     }
+
+    sort() {
+        if (this.queryString.sort) {
+            let sort = this.queryString.sort.replace(",", " ");
+            this.mongooseQuery.sort(sort)
+        }
+        return this
+    }
+
 }
 
 export default ApiFeatures

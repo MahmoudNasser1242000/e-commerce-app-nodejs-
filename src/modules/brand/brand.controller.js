@@ -15,7 +15,7 @@ const addBrand = errorAsyncHandler(async (req, res, next) => {
 })
 
 const getAllBrands = errorAsyncHandler(async (req, res, next) => {
-    const apiFeatures = new ApiFeatures(brandModel.find(), req.query).pagination().filter()
+    const apiFeatures = new ApiFeatures(brandModel.find(), req.query).pagination().filter().sort()
     const brands = await apiFeatures.mongooseQuery
     res.status(200).json({length: brands.length, page: apiFeatures.page, brands});
 })
