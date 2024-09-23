@@ -15,6 +15,19 @@ class ApiFeatures {
         this.mongooseQuery.skip(skip).limit(limit)
         return this
     }
+
+    filter () {
+        let filterObj = {...this.queryString};
+        const excutedQueries = ["page", "keyword", "sort", "fields"];
+        excutedQueries.forEach((query) => delete filterObj[query]);
+
+        filterObj = JSON.stringify(filterObj);
+        filterObj = filterObj.replace(/\bgt|gte|lt|lte\b/g, (match) => `$${match}`);
+        filterObj = JSON.parse(filterObj)
+
+        this.mongooseQuery.find(filterObj)
+        return this
+    }
 }
 
 export default ApiFeatures
