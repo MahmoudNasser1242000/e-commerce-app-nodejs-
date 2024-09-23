@@ -1,4 +1,5 @@
 import reviewModel from "../../../database/models/review.model.js";
+import { findById, findByIdAndDelete } from "../../../services/apiHandler.js";
 import errorAsyncHandler from "../../../services/errorAsyncHandler.js";
 import AppError from "../../../utils/errorClass.js";
 
@@ -13,12 +14,7 @@ const getAllReviews = errorAsyncHandler(async (req, res, next) => {
     res.status(200).json({reviews});
 })
 
-const getSpecificReview = errorAsyncHandler(async (req, res, next) => {
-    const review = await reviewModel.findById(req.params.reviewId);
-    if (!review) 
-        return next(new AppError("Cant not find review with this id", 400))
-    res.status(200).json({review});
-})
+const getSpecificReview = findById(reviewModel, "reviewId", "review")
 
 const updateReview = errorAsyncHandler(async (req, res, next) => {
     const {reviewId} = req.params;
@@ -28,13 +24,7 @@ const updateReview = errorAsyncHandler(async (req, res, next) => {
     res.status(202).json({msg: "Review updated successfully", review});
 })
 
-const deleteReview = errorAsyncHandler(async (req, res, next) => {
-    const {reviewId} = req.params;
-    const review = await reviewModel.findByIdAndDelete({_id: reviewId});
-    if (!review) 
-        return next(new AppError("Cant not find review with this id", 400))
-    res.status(202).json({msg: "Review deleted successfully", review});
-})
+const deleteReview = findByIdAndDelete(reviewModel, "reviewId", "review")
 
 export {
     addReview,

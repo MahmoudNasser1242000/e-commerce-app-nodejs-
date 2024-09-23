@@ -2,6 +2,7 @@ import slugify from "slugify";
 import errorAsyncHandler from "../../../services/errorAsyncHandler.js";
 import productModel from "../../../database/models/product.model.js";
 import AppError from "../../../utils/errorClass.js";
+import { findById, findByIdAndDelete } from "../../../services/apiHandler.js";
 
 const addProduct = errorAsyncHandler(async (req, res, next) => {
     req.body.slug = slugify(req.body.title);
@@ -19,12 +20,7 @@ const getAllProducts = errorAsyncHandler(async (req, res, next) => {
     res.status(200).json({products});
 })
 
-const getSpecificProduct = errorAsyncHandler(async (req, res, next) => {
-    const product = await productModel.findById(req.params.productId);
-    if (!product) 
-        return next(new AppError("Cant not find product with this id", 400))
-    res.status(200).json({product});
-})
+const getSpecificProduct = findById(productModel, "productId", "product")
 
 const updateProduct = errorAsyncHandler(async (req, res, next) => {
     const {productId} = req.params;
@@ -43,13 +39,7 @@ const updateProduct = errorAsyncHandler(async (req, res, next) => {
     res.status(202).json({msg: "Product updated successfully", product});
 })
 
-const deleteProduct = errorAsyncHandler(async (req, res, next) => {
-    const {productId} = req.params;
-    const product = await productModel.findByIdAndDelete({_id: productId});
-    if (!product) 
-        return next(new AppError("Cant not find product with this id", 400))
-    res.status(202).json({msg: "Product deleted successfully", product});
-})
+const deleteProduct = findByIdAndDelete(productModel, "productId", "product")
 
 export {
     addProduct,

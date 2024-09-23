@@ -1,4 +1,5 @@
 import couponModel from "../../../database/models/coupon.model.js";
+import { findById, findByIdAndDelete } from "../../../services/apiHandler.js";
 import errorAsyncHandler from "../../../services/errorAsyncHandler.js";
 import AppError from "../../../utils/errorClass.js";
 
@@ -14,12 +15,7 @@ const getAllCoupons = errorAsyncHandler(async (req, res, next) => {
     res.status(200).json({coupons});
 })
 
-const getSpecificCoupon = errorAsyncHandler(async (req, res, next) => {
-    const coupon = await couponModel.findById(req.params.couponId);
-    if (!coupon) 
-        return next(new AppError("Cant not find coupon with this id", 400))
-    res.status(200).json({coupon});
-})
+const getSpecificCoupon = findById(couponModel, "couponId", "coupon")
 
 const updateCoupon = errorAsyncHandler(async (req, res, next) => {
     const {couponId} = req.params;
@@ -29,13 +25,7 @@ const updateCoupon = errorAsyncHandler(async (req, res, next) => {
     res.status(202).json({msg: "Coupon updated successfully", coupon});
 })
 
-const deleteCoupon = errorAsyncHandler(async (req, res, next) => {
-    const {couponId} = req.params;
-    const coupon = await couponModel.findByIdAndDelete({_id: couponId});
-    if (!coupon) 
-        return next(new AppError("Cant not find coupon with this id", 400))
-    res.status(202).json({msg: "Coupon deleted successfully", coupon});
-})
+const deleteCoupon = findByIdAndDelete(couponModel, "couponId", "coupon")
 
 export {
     addCoupon,
