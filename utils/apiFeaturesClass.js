@@ -49,6 +49,14 @@ class ApiFeatures {
         }
         return this
     }
+
+    fields() {
+        if (this.queryString.fields) {
+            let fields = this.queryString.fields.replace(",", " ");
+            this.mongooseQuery.select(fields)
+        }
+        return this
+    }
 }
 
 export default ApiFeatures
