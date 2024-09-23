@@ -3,6 +3,7 @@ import errorAsyncHandler from "../../../services/errorAsyncHandler.js";
 import brandModel from "../../../database/models/brand.model.js";
 import AppError from "../../../utils/errorClass.js";
 import { findById } from "../../../services/apiHandler.js";
+import ApiFeatures from "../../../utils/apiFeaturesClass.js";
 
 const addBrand = errorAsyncHandler(async (req, res, next) => {
     req.body.slug = slugify(req.body.name)
@@ -14,8 +15,9 @@ const addBrand = errorAsyncHandler(async (req, res, next) => {
 })
 
 const getAllBrands = errorAsyncHandler(async (req, res, next) => {
-    const brands = await brandModel.find({});
-    res.status(200).json({brands});
+    const apiFeatures = new ApiFeatures(brandModel.find(), req.query).pagination()
+    const brands = await apiFeatures.mongooseQuery
+    res.status(200).json({length: brands.length, page: apiFeatures.page, brands});
 })
 
 const getSpecificBrand = findById(brandModel, "brandId", "brand")
