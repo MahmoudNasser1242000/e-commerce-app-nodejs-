@@ -13,8 +13,12 @@ import {
     subCategoryIdSchema,
     updateSubCategorySchema,
 } from "./subCategory.validation.js";
+import productRouter from "../product/product.routes.js";
+import checkSubCategory from "../../middlewares/checkSubCategory.js";
 
-const subCategoryRouter = Router();
+const subCategoryRouter = Router({mergeParams: true});
+
+subCategoryRouter.use("/:subCategoryId/products", checkSubCategory, productRouter)
 
 subCategoryRouter.route("/")
     .get(getAllSubCategories)

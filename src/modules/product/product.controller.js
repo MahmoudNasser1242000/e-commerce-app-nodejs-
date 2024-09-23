@@ -16,7 +16,18 @@ const addProduct = errorAsyncHandler(async (req, res, next) => {
 });
 
 const getAllProducts = errorAsyncHandler(async (req, res, next) => {
-    const products = await productModel.find({});
+    let filterObj = {}
+    const {brandId, categoryId, subCategotyId} = req.params
+    if (brandId) {
+        filterObj.brand = brandId
+    }
+    if (categoryId) {
+        filterObj.category = categoryId
+    }
+    if (subCategotyId) {
+        filterObj.subCategoty = subCategotyId
+    }
+    const products = await productModel.find(filterObj);
     res.status(200).json({products});
 })
 

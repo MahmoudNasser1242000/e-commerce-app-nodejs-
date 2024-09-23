@@ -15,7 +15,7 @@ const subCategorySchema = new Schema({
         lowercase: true,
         required: true, 
     },
-    categoryId: {
+    category: {
         type: Schema.Types.ObjectId, 
         ref: "Category", 
         required: true

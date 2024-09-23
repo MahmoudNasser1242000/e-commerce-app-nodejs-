@@ -7,7 +7,7 @@ import { uploadFields } from "../../../utils/filesUpload.js";
 import schemaValidation from "../../../utils/schemaValidation.js";
 import { addProductSchema, productIdSchema, updateProductSchema } from "./product.validation.js";
 
-const productRouter = Router();
+const productRouter = Router({mergeParams: true});
 
 productRouter.route("/")
     .post(

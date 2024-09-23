@@ -3,8 +3,12 @@ import { addBrand, deleteBrand, getAllBrands, getSpecificBrand, updateBrand } fr
 import { uploadSingle } from "../../../utils/filesUpload.js";
 import schemaValidation from "../../../utils/schemaValidation.js";
 import { addBrandSchema, brandIdSchema, updateBrandSchema } from "./brand.validation.js";
+import checkBrandId from "../../middlewares/checkBrandId.js";
+import productRouter from "../product/product.routes.js";
 
 const brandRouter = Router();
+
+brandRouter.use("/:brandId/products", checkBrandId, productRouter)
 
 brandRouter.route("/")
     .post(
