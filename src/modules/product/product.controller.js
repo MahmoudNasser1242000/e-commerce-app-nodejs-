@@ -3,6 +3,7 @@ import errorAsyncHandler from "../../../services/errorAsyncHandler.js";
 import productModel from "../../../database/models/product.model.js";
 import AppError from "../../../utils/errorClass.js";
 import { findById, findByIdAndDelete } from "../../../services/apiHandler.js";
+import ApiFeatures from "../../../utils/apiFeaturesClass.js";
 
 const addProduct = errorAsyncHandler(async (req, res, next) => {
     req.body.slug = slugify(req.body.title);
@@ -17,18 +18,23 @@ const addProduct = errorAsyncHandler(async (req, res, next) => {
 
 const getAllProducts = errorAsyncHandler(async (req, res, next) => {
     let filterObj = {}
-    const {brandId, categoryId, subCategotyId} = req.params
-    if (brandId) {
-        filterObj.brand = brandId
-    }
-    if (categoryId) {
-        filterObj.category = categoryId
-    }
-    if (subCategotyId) {
-        filterObj.subCategoty = subCategotyId
-    }
-    const products = await productModel.find(filterObj);
-    res.status(200).json({products});
+    const params = ["brand", "category", "subCategory"];
+    params.forEach((param) => {
+        if (req.params[param]) {
+            filterObj[param] = req.params[param]
+        }
+    })
+
+    const apiFeatures = new ApiFeatures(productModel.find(filterObj), req.query)
+        .pagination()
+        .filter()
+        .sort()
+        .search()
+        .fields();
+    const products = await apiFeatures.mongooseQuery;
+    res
+        .status(200)
+        .json({ length: products.length, page: apiFeatures.page, products });
 })
 
 const getSpecificProduct = findById(productModel, "productId", "product")

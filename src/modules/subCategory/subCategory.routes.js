@@ -18,7 +18,7 @@ import checkSubCategory from "../../middlewares/checkSubCategory.js";
 
 const subCategoryRouter = Router({mergeParams: true});
 
-subCategoryRouter.use("/:subCategoryId/products", checkSubCategory, productRouter)
+subCategoryRouter.use("/:subCategory/products", checkSubCategory, productRouter)
 
 subCategoryRouter.route("/")
     .get(getAllSubCategories)

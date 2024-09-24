@@ -9,8 +9,8 @@ import productRouter from "../product/product.routes.js";
 
 const categoryRouter = Router();
 
-categoryRouter.use("/:categoryId/subCategories", checkCategoryId, subCategoryRouter)
-categoryRouter.use("/:categoryId/products", checkCategoryId, productRouter)
+categoryRouter.use("/:category/subCategories", checkCategoryId, subCategoryRouter)
+categoryRouter.use("/:category/products", checkCategoryId, productRouter)
 
 categoryRouter.route("/")
     .post(

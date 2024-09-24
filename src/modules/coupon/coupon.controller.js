@@ -1,6 +1,7 @@
 import couponModel from "../../../database/models/coupon.model.js";
 import { findById, findByIdAndDelete } from "../../../services/apiHandler.js";
 import errorAsyncHandler from "../../../services/errorAsyncHandler.js";
+import ApiFeatures from "../../../utils/apiFeaturesClass.js";
 import AppError from "../../../utils/errorClass.js";
 
 const addCoupon = errorAsyncHandler(async (req, res, next) => {
@@ -11,8 +12,14 @@ const addCoupon = errorAsyncHandler(async (req, res, next) => {
 })
 
 const getAllCoupons = errorAsyncHandler(async (req, res, next) => {
-    const coupons = await couponModel.find({});
-    res.status(200).json({coupons});
+    const apiFeatures = new ApiFeatures(couponModel.find(), req.query)
+        .pagination()
+        .filter()
+        .sort()
+        .search()
+        .fields();
+    const coupons = await apiFeatures.mongooseQuery;
+    res.status(200).json({length: coupons.length, page: apiFeatures.page, coupons});
 })
 
 const getSpecificCoupon = findById(couponModel, "couponId", "coupon")

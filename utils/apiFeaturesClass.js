@@ -41,9 +41,9 @@ class ApiFeatures {
         if (this.queryString.keyword) {
             this.mongooseQuery.find({
                 $or: [
-                    {name: {$regex: this.queryString.keyword, $options: "i"}},
-                    {title: {$regex: this.queryString.keyword, $options: "i"}},
-                    {description: {$regex: this.queryString.keyword, $options: "i"}},
+                    { name: { $regex: this.queryString.keyword, $options: "i" } },
+                    { title: { $regex: this.queryString.keyword, $options: "i" } },
+                    { description: { $regex: this.queryString.keyword, $options: "i" } },
                 ]
             })
         }

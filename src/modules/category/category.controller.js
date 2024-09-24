@@ -3,6 +3,7 @@ import categoryModel from "../../../database/models/category.model.js";
 import errorAsyncHandler from "../../../services/errorAsyncHandler.js";
 import AppError from "../../../utils/errorClass.js";
 import { findById, findByIdAndDelete } from "../../../services/apiHandler.js";
+import ApiFeatures from "../../../utils/apiFeaturesClass.js";
 
 const addCategorey = errorAsyncHandler(async (req, res, next) => {
     req.body.slug = slugify(req.body.name)
@@ -13,8 +14,14 @@ const addCategorey = errorAsyncHandler(async (req, res, next) => {
 })
 
 const getAllCategories = errorAsyncHandler(async (req, res, next) => {
-    const categories = await categoryModel.find({});
-    res.status(200).json({categories});
+    const apiFeatures = new ApiFeatures(categoryModel.find(), req.query)
+        .pagination()
+        .filter()
+        .sort()
+        .search()
+        .fields();
+    const categories = await apiFeatures.mongooseQuery;
+    res.status(200).json({length: categories.length, page: apiFeatures.page, categories});
 })
 
 const getSpecificCategory = findById(categoryModel, "categoryId", "category")

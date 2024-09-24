@@ -1,6 +1,7 @@
 import reviewModel from "../../../database/models/review.model.js";
 import { findById, findByIdAndDelete } from "../../../services/apiHandler.js";
 import errorAsyncHandler from "../../../services/errorAsyncHandler.js";
+import ApiFeatures from "../../../utils/apiFeaturesClass.js";
 import AppError from "../../../utils/errorClass.js";
 
 const addReview = errorAsyncHandler(async (req, res, next) => {
@@ -10,8 +11,16 @@ const addReview = errorAsyncHandler(async (req, res, next) => {
 })
 
 const getAllReviews = errorAsyncHandler(async (req, res, next) => {
-    const reviews = await reviewModel.find({});
-    res.status(200).json({reviews});
+    const apiFeatures = new ApiFeatures(reviewModel.find(), req.query)
+        .pagination()
+        .filter()
+        .sort()
+        .search()
+        .fields();
+    const reviews = await apiFeatures.mongooseQuery;
+    res
+        .status(200)
+        .json({ length: reviews.length, page: apiFeatures.page, reviews });
 })
 
 const getSpecificReview = findById(reviewModel, "reviewId", "review")

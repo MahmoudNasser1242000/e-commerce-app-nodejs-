@@ -8,7 +8,7 @@ import productRouter from "../product/product.routes.js";
 
 const brandRouter = Router();
 
-brandRouter.use("/:brandId/products", checkBrandId, productRouter)
+brandRouter.use("/:brand/products", checkBrandId, productRouter)
 
 brandRouter.route("/")
     .post(
