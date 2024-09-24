@@ -23,8 +23,9 @@ categorySchema.pre("save", function (next) {
     next()
 })
 
-categorySchema.post("init", function (doc) {
-    doc.img = "http://localhost:3000/uploads/" + doc.img
+categorySchema.pre("findOneAndUpdate", function (next) {
+    this._update.img = "http://localhost:3000/uploads/" + this._update.img;
+    next()
 })
 
 const categoryModel = mongoose.model('Category', categorySchema);

@@ -27,7 +27,7 @@ const getSpecificReview = findById(reviewModel, "reviewId", "review")
 
 const updateReview = errorAsyncHandler(async (req, res, next) => {
     const {reviewId} = req.params;
-    const review = await reviewModel.findByIdAndUpdate({_id: reviewId}, {...req.body}, {new: true});
+    const review = await reviewModel.findOneAndUpdate({_id: reviewId}, {...req.body}, {new: true});
     if (!review) 
         return next(new AppError("Cant not find review with this id", 400))
     res.status(202).json({msg: "Review updated successfully", review});

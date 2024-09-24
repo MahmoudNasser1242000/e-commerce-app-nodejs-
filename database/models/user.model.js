@@ -40,8 +40,9 @@ userSchema.pre("save", function (next) {
     next()
 })
 
-userSchema.post("init", function (doc) {
-    doc.profileImg = "http://localhost:3000/uploads/" + doc.profileImg
+userSchema.pre("findOneAndUpdate", function (next) {
+    this._update.profileImg = "http://localhost:3000/uploads/" + this._update.profileImg;
+    next()
 })
 
 const userModel = mongoose.model('User', userSchema);

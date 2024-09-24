@@ -39,7 +39,7 @@ const updateSubCategory = errorAsyncHandler(async (req, res, next) => {
     const { name } = req.body;
     if (name) req.body.slug = slugify(name);
 
-    const subCategory = await subCategoryModel.findByIdAndUpdate(
+    const subCategory = await subCategoryModel.findOneAndUpdate(
         { _id: subCategoryId },
         { ...req.body },
         { new: true }

@@ -26,7 +26,7 @@ const getSpecificCoupon = findById(couponModel, "couponId", "coupon")
 
 const updateCoupon = errorAsyncHandler(async (req, res, next) => {
     const {couponId} = req.params;
-    const coupon = await couponModel.findByIdAndUpdate({_id: couponId}, {...req.body}, {new: true});
+    const coupon = await couponModel.findOneAndUpdate({_id: couponId}, {...req.body}, {new: true});
     if (!coupon) 
         return next(new AppError("Cant not find coupon with this id", 400))
     res.status(202).json({msg: "Coupon updated successfully", coupon});

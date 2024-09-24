@@ -72,9 +72,10 @@ productSchema.pre("save", function (next) {
     next()
 })
 
-productSchema.post("init", function (doc) {
-    doc.imgCover = "http://localhost:3000/uploads/" + doc.imgCover
-    doc.images = doc.images?.map((img) => "http://localhost:3000/uploads/" + img)
+productSchema.pre("findOneAndUpdate", function (next) {
+    this._update.imgCover = "http://localhost:3000/uploads/" + this._update.imgCover;
+    this._update.images = this._update.images?.map((img) => "http://localhost:3000/uploads/" + img)
+    next()
 })
 
 const productModel = mongoose.model('Product', productSchema);

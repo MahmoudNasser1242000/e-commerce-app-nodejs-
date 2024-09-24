@@ -50,7 +50,7 @@ const updateProduct = errorAsyncHandler(async (req, res, next) => {
     if (req.files.images)
         req.body.images = req.files.images.map((img) => img.filename)
         
-    const product = await productModel.findByIdAndUpdate({_id: productId}, {...req.body}, {new: true});
+    const product = await productModel.findOneAndUpdate({_id: productId}, {...req.body}, {new: true});
     if (!product) 
         return next(new AppError("Cant not find product with this id", 400))
     res.status(202).json({msg: "Product updated successfully", product});
