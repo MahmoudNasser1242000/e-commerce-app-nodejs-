@@ -35,7 +35,7 @@ const changePassword = errorAsyncHandler(async (req, res, next) => {
 
     const user = await userModel.findOneAndUpdate(
         { _id: loggedUser._id },
-        { password: newPassword },
+        { password: newPassword, changePasswordAt: new Date() },
         { new: true }
     );
     if (!user)

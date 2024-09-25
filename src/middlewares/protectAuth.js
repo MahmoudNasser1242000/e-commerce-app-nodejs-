@@ -5,7 +5,6 @@ import AppError from "../../utils/errorClass.js";
 
 const protectAuth = errorAsyncHandler(async (req, res, next) => {
     const {authorization} = req.headers
-    console.log(authorization);
     if (!authorization || !authorization.startsWith("Bearer"))
         return next(new AppError("Must provide valid token", 400));
 
@@ -18,6 +17,8 @@ const protectAuth = errorAsyncHandler(async (req, res, next) => {
     if (!user) 
         return next(new AppError("Invalid user token", 400));
 
+    if (user.changePasswordAt && decode.iat < Math.round(user.changePasswordAt.getTime())) 
+        return next(new AppError("Invalid user token", 400));
     req.user = user
     next()
 })
