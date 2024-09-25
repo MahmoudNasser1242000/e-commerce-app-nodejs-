@@ -1,3 +1,4 @@
+import authRouter from "./modules/auth/auth.routes.js";
 import brandRouter from "./modules/brand/brand.routes.js";
 import categoryRouter from "./modules/category/category.routes.js";
 import couponRoter from "./modules/coupon/coupon.routes.js";
@@ -14,6 +15,7 @@ const Bootstrap = (app) => {
     app.use("/api/v1/coupons", couponRoter)
     app.use("/api/v1/reviews", reviewRoter)
     app.use("/api/v1/users", userRouter)
+    app.use("/api/v1/auth", authRouter)
 }
 
 export default Bootstrap;

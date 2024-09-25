@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import bcrypt from "bcrypt";
+
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
@@ -24,6 +26,7 @@ const userSchema = new Schema({
         enum: ["user", "admin"],
         default: "user"
     },
+    changePasswordAt: Date,
     isBlocked: {
         type: Boolean,
         default: false
@@ -36,12 +39,22 @@ const userSchema = new Schema({
 });
 
 userSchema.pre("save", function (next) {
-    this.profileImg = "http://localhost:3000/uploads/" + this.profileImg
+    this.profileImg = "http://localhost:3000/uploads/" + this.profileImg;
+
+    const hashPassword = bcrypt.hashSync(this.password, 8);
+    this.password = hashPassword
     next()
 })
 
 userSchema.pre("findOneAndUpdate", function (next) {
-    this._update.profileImg = "http://localhost:3000/uploads/" + this._update.profileImg;
+    if (this._update.profileImg) {
+        this._update.profileImg = "http://localhost:3000/uploads/" + this._update.profileImg;
+    }
+
+    if (this._update.password) {
+        const hashPassword = bcrypt.hashSync(this._update.password, 8);
+        this._update.password = hashPassword    
+    }
     next()
 })
 

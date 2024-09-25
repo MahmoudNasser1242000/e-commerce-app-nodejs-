@@ -5,7 +5,7 @@ const checkUserEmailExist = errorAsyncHandler(async (req, res, next) => {
     const user = await userModel.findOne({email: req.body.email});
 
     if (user) 
-        return res.status(400).json({msg: "Email allready exist"});
+        return next(new AppError("Email allready exist", 400));
     next()
 })
 

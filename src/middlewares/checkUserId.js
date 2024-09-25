@@ -5,7 +5,7 @@ const checkUserId = errorAsyncHandler(async (req, res, next) => {
     const user = await userModel.findById(req.params.user);
 
     if (!user) 
-        return res.status(400).json({msg: "Can not find user with this id"});
+        return next(new AppError("Can not find user with this id", 400));
     next()
 })
 

@@ -5,7 +5,7 @@ const checkCategoryId = errorAsyncHandler(async (req, res, next) => {
     const category = await categoryModel.findById(req.body.category || req.params.category);
 
     if (!category) 
-        return res.status(400).json({msg: "Can not find category with this id"});
+        return next(new AppError("Can not find category with this id", 400));
     next()
 })
 

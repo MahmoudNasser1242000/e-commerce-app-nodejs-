@@ -24,7 +24,9 @@ categorySchema.pre("save", function (next) {
 })
 
 categorySchema.pre("findOneAndUpdate", function (next) {
-    this._update.img = "http://localhost:3000/uploads/" + this._update.img;
+    if (this._update.img) {
+        this._update.img = "http://localhost:3000/uploads/" + this._update.img;
+    }
     next()
 })
 

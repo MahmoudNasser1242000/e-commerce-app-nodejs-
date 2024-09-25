@@ -21,7 +21,7 @@ app.use("**", (req, res, next) =>
 app.use((err, req, res, next) =>
     res
         .status(err.statusCode || 500)
-        .json({ error: "Error", message: err.message })
+        .json({ error: "Error", message: err.message, stack: err.stack })
 );
 const port = 3000;
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

@@ -54,7 +54,7 @@ const addProductSchema = Joi.object({
         filename: Joi.string().required(),
         path: Joi.string().required(),
         size: Joi.number().max(5242880).required()
-    })).required(),
+    }).required()).required(),
 
     images: Joi.array().items(Joi.object({
         fieldname: Joi.string().required(),
@@ -65,7 +65,7 @@ const addProductSchema = Joi.object({
         filename: Joi.string().required(),
         path: Joi.string().required(),
         size: Joi.number().max(5242880).required()
-    })).optional()
+    }).required()).optional()
 })
 
 const updateProductSchema = Joi.object({
@@ -125,7 +125,7 @@ const updateProductSchema = Joi.object({
         filename: Joi.string().required(),
         path: Joi.string().required(),
         size: Joi.number().max(5242880).required()
-    })).optional(),
+    }).required()).optional(),
 
     images: Joi.array().items(Joi.object({
         fieldname: Joi.string().required(),
@@ -136,7 +136,7 @@ const updateProductSchema = Joi.object({
         filename: Joi.string().required(),
         path: Joi.string().required(),
         size: Joi.number().max(5242880).required()
-    })).optional()
+    }).required()).optional()
 })
 
 const productIdSchema = Joi.object({

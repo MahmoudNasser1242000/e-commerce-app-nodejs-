@@ -73,8 +73,12 @@ productSchema.pre("save", function (next) {
 })
 
 productSchema.pre("findOneAndUpdate", function (next) {
-    this._update.imgCover = "http://localhost:3000/uploads/" + this._update.imgCover;
-    this._update.images = this._update.images?.map((img) => "http://localhost:3000/uploads/" + img)
+    if (this._update.imgCover) {
+        this._update.imgCover = "http://localhost:3000/uploads/" + this._update.imgCover;
+    }
+    if (this._update.images) {
+        this._update.images = this._update.images?.map((img) => "http://localhost:3000/uploads/" + img)
+    }
     next()
 })
 

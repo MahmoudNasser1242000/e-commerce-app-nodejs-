@@ -10,6 +10,7 @@ const schemaValidation = (schema) => {
         } else {
             inputData = {...req.body, ...req.params, ...req.query}
         }
+        
         const {error} = schema.validate(inputData, {abortEarly: false})
         if (error) {
             const errValidation = error.details.map((err) => err.message)

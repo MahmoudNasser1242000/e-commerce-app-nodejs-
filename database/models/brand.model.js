@@ -24,7 +24,9 @@ brandSchema.pre("save", function (next) {
 })
 
 brandSchema.pre("findOneAndUpdate", function (next) {
-    this._update.logo = "http://localhost:3000/uploads/" + this._update.logo;
+    if (this._update.logo) {
+        this._update.logo = "http://localhost:3000/uploads/" + this._update.logo;
+    }
     next()
 })
 
