@@ -13,7 +13,7 @@ const schemaValidation = (schema) => {
         const {error} = schema.validate(inputData, {abortEarly: false})
         if (error) {
             const errValidation = error.details.map((err) => err.message)
-            next(new AppError(errValidation, 401))
+            return res.status(401).json({error: "Error", message: errValidation})
         }
         next()
     }
