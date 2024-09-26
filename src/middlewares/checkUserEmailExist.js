@@ -1,5 +1,6 @@
 import userModel from "../../database/models/user.model.js";
 import errorAsyncHandler from "../../services/errorAsyncHandler.js";
+import AppError from "../../utils/errorClass.js";
 
 const checkUserEmailExist = errorAsyncHandler(async (req, res, next) => {
     const user = await userModel.findOne({email: req.body.email});

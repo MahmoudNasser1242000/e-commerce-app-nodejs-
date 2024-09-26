@@ -15,14 +15,26 @@ import {
 } from "./subCategory.validation.js";
 import productRouter from "../product/product.routes.js";
 import checkSubCategory from "../../middlewares/checkSubCategory.js";
+import protectAuth from "../../middlewares/protectAuth.js";
+import roleAccess from "../../middlewares/RoleAccess.js";
 
-const subCategoryRouter = Router({mergeParams: true});
+const subCategoryRouter = Router({ mergeParams: true });
 
-subCategoryRouter.use("/:subCategory/products", checkSubCategory, productRouter)
+subCategoryRouter.use(
+    "/:subCategory/products",
+    protectAuth,
+    roleAccess("admin"),
+    schemaValidation(subCategoryIdSchema),
+    checkSubCategory,
+    productRouter
+);
 
-subCategoryRouter.route("/")
-    .get(getAllSubCategories)
+subCategoryRouter
+    .route("/")
+    .get(protectAuth, getAllSubCategories)
     .post(
+        protectAuth,
+        roleAccess("admin"),
         schemaValidation(addSubCategorySchema),
         checkCategoryId,
         addSubCategorey
@@ -30,8 +42,22 @@ subCategoryRouter.route("/")
 
 subCategoryRouter
     .route("/:subCategoryId")
-    .get(schemaValidation(subCategoryIdSchema), getSpecificSubCategory)
-    .patch(schemaValidation(updateSubCategorySchema), updateSubCategory)
-    .delete(schemaValidation(subCategoryIdSchema), deleteSubCategory);
+    .get(
+        protectAuth,
+        schemaValidation(subCategoryIdSchema),
+        getSpecificSubCategory
+    )
+    .patch(
+        protectAuth,
+        roleAccess("admin"),
+        schemaValidation(updateSubCategorySchema),
+        updateSubCategory
+    )
+    .delete(
+        protectAuth,
+        roleAccess("admin"),
+        schemaValidation(subCategoryIdSchema),
+        deleteSubCategory
+    );
 
 export default subCategoryRouter;

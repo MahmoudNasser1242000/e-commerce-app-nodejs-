@@ -6,11 +6,15 @@ import checkBrandId from "../../middlewares/checkBrandId.js";
 import { uploadFields } from "../../../utils/filesUpload.js";
 import schemaValidation from "../../../utils/schemaValidation.js";
 import { addProductSchema, productIdSchema, updateProductSchema } from "./product.validation.js";
+import protectAuth from "../../middlewares/protectAuth.js";
+import roleAccess from "../../middlewares/RoleAccess.js";
 
 const productRouter = Router({mergeParams: true});
 
 productRouter.route("/")
     .post(
+        protectAuth,
+        roleAccess("admin"),
         checkCategoryId,
         checkSubCategory,
         checkBrandId,
@@ -19,15 +23,19 @@ productRouter.route("/")
         addProduct
     )
     .get(
+        protectAuth,
         getAllProducts
     )
     
 productRouter.route("/:productId")
     .get(
+        protectAuth,
         schemaValidation(productIdSchema),
         getSpecificProduct
     )
     .patch(
+        protectAuth,
+        roleAccess("admin"),
         checkCategoryId,
         checkSubCategory,
         checkBrandId,
@@ -36,6 +44,8 @@ productRouter.route("/:productId")
         updateProduct
     )
     .delete(
+        protectAuth,
+        roleAccess("admin"),
         schemaValidation(productIdSchema),
         deleteProduct
     )

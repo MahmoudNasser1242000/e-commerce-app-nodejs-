@@ -8,13 +8,18 @@ import ApiFeatures from "../../../utils/apiFeaturesClass.js";
 const addBrand = errorAsyncHandler(async (req, res, next) => {
     req.body.slug = slugify(req.body.name);
     if (req.file) req.body.logo = req.file.filename;
+    req.body.createdBy = req.user._id;
     const addBrand = new brandModel({ ...req.body });
     const brand = await addBrand.save();
     res.status(201).json({ msg: "Brand added successfully", brand });
 });
 
 const getAllBrands = errorAsyncHandler(async (req, res, next) => {
-    const apiFeatures = new ApiFeatures(brandModel.find(), req.query)
+    let filterObj = {};
+    if (req.params.createdBy) {
+        filterObj.createdBy = req.params.createdBy
+    }
+    const apiFeatures = new ApiFeatures(brandModel.find(filterObj), req.query)
         .pagination()
         .filter()
         .sort()

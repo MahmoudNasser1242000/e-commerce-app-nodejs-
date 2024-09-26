@@ -16,6 +16,11 @@ const brandSchema = new Schema({
         required: true, 
     },
     logo: String,
+    createdBy: {
+        type: Schema.Types.ObjectId, 
+        ref: "User",
+        required: true
+    },
 }, {timestamps: true});
 
 brandSchema.pre("save", function (next) {

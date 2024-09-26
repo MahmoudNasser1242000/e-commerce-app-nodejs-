@@ -11,6 +11,7 @@ const addProduct = errorAsyncHandler(async (req, res, next) => {
         req.body.imgCover = req.files.imgCover[0].filename
         req.body.images = req.files.images.map((img) => img.filename)
 
+    req.body.createdBy = req.user._id;
     const addProduct = new productModel(req.body);
     const product = await addProduct.save()
     res.status(201).json({ msg: "Product added successfully", product });
@@ -18,13 +19,13 @@ const addProduct = errorAsyncHandler(async (req, res, next) => {
 
 const getAllProducts = errorAsyncHandler(async (req, res, next) => {
     let filterObj = {}
-    const params = ["brand", "category", "subCategory"];
+    const params = ["brand", "category", "subCategory", "createdBy"];
     params.forEach((param) => {
         if (req.params[param]) {
             filterObj[param] = req.params[param]
         }
     })
-
+    
     const apiFeatures = new ApiFeatures(productModel.find(filterObj), req.query)
         .pagination()
         .filter()

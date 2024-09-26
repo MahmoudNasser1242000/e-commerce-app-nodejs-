@@ -7,6 +7,7 @@ import ApiFeatures from "../../../utils/apiFeaturesClass.js";
 
 const addSubCategorey = errorAsyncHandler(async (req, res, next) => {
     req.body.slug = slugify(req.body.name);
+    req.body.createdBy = req.user._id;
     const subCategory = await subCategoryModel.insertMany({ ...req.body });
     res.status(201).json({ msg: "SubCategory added successfully", subCategory });
 });
@@ -14,7 +15,10 @@ const addSubCategorey = errorAsyncHandler(async (req, res, next) => {
 const getAllSubCategories = errorAsyncHandler(async (req, res, next) => {
     let filterObj = {}
     if (req.params.category) 
-        filterObj.category = req.params.category
+        filterObj.category = req.params.category;
+
+    if (req.params.createdBy) 
+        filterObj.createdBy = req.params.createdBy;
 
     const apiFeatures = new ApiFeatures(subCategoryModel.find(filterObj), req.query)
         .pagination()

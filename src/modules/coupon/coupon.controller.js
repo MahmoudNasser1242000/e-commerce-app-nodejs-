@@ -6,13 +6,18 @@ import AppError from "../../../utils/errorClass.js";
 
 const addCoupon = errorAsyncHandler(async (req, res, next) => {
     // req.body.code = Math.round(Math.random() * 9999)
+    req.body.createdBy = req.user._id;
     const addCoupon = new couponModel({...req.body})
     const coupon = await addCoupon.save();
     res.status(201).json({msg: "Coupon added successfully", coupon});
 })
 
 const getAllCoupons = errorAsyncHandler(async (req, res, next) => {
-    const apiFeatures = new ApiFeatures(couponModel.find(), req.query)
+    let filterObj = {};
+    if (req.params.createdBy) {
+        filterObj.createdBy = req.params.createdBy
+    }
+    const apiFeatures = new ApiFeatures(couponModel.find(filterObj), req.query)
         .pagination()
         .filter()
         .sort()

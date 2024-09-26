@@ -17,7 +17,7 @@ const protectAuth = errorAsyncHandler(async (req, res, next) => {
     if (!user) 
         return next(new AppError("Invalid user token", 400));
 
-    if (user.changePasswordAt && decode.iat < Math.round(user.changePasswordAt.getTime())) 
+    if (user.changePasswordAt && decode.iat < Math.round(user.changePasswordAt.getTime()/1000)) 
         return next(new AppError("Invalid user token", 400));
     req.user = user
     next()

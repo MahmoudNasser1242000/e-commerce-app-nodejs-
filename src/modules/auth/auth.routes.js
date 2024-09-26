@@ -1,4 +1,4 @@
-import {Router} from "express";
+import { Router } from "express";
 import { uploadSingle } from "../../../utils/filesUpload.js";
 import schemaValidation from "../../../utils/schemaValidation.js";
 import { changePassword, signIn, signUp } from "./auth.controller.js";
@@ -9,18 +9,18 @@ import protectAuth from "../../middlewares/protectAuth.js";
 const authRouter = Router();
 
 authRouter.post(
-        "/signUp",
-        uploadSingle("profileImg"),
-        schemaValidation(signUpSchema),
-        checkUserEmailExist,
-        signUp
-    )
+    "/signUp",
+    uploadSingle("profileImg"),
+    schemaValidation(signUpSchema),
+    checkUserEmailExist,
+    signUp
+)
 
 authRouter.post(
-        "/signIn",
-        schemaValidation(signInSchema),
-        signIn
-    )
+    "/signIn",
+    schemaValidation(signInSchema),
+    signIn
+)
 
 authRouter.patch(
     "/changePassword",

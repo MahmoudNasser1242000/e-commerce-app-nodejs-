@@ -5,13 +5,18 @@ import ApiFeatures from "../../../utils/apiFeaturesClass.js";
 import AppError from "../../../utils/errorClass.js";
 
 const addReview = errorAsyncHandler(async (req, res, next) => {
+    req.body.createdBy = req.user._id;
     const addReview = new reviewModel({...req.body})
     const review = await addReview.save();
     res.status(201).json({msg: "Review added successfully", review});
 })
 
 const getAllReviews = errorAsyncHandler(async (req, res, next) => {
-    const apiFeatures = new ApiFeatures(reviewModel.find(), req.query)
+    let filterObj = {};
+    if (req.params.createdBy) {
+        filterObj.createdBy = req.params.createdBy
+    }
+    const apiFeatures = new ApiFeatures(reviewModel.find(filterObj), req.query)
         .pagination()
         .filter()
         .sort()

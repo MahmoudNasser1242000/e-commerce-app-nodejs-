@@ -30,11 +30,11 @@ const couponSchema = new Schema({
         ref: "Product", 
         required: true
     },
-    admin: {
+    createdBy: {
         type: Schema.Types.ObjectId, 
-        ref: "User", 
+        ref: "User",
         required: true
-    }
+    },
 });
 
 const couponModel = mongoose.model('Coupon', couponSchema);

@@ -63,7 +63,12 @@ const productSchema = new Schema({
         ref: "Brand", 
         required: true
     },
-});
+    createdBy: {
+        type: Schema.Types.ObjectId, 
+        ref: "User",
+        required: true
+    },
+}, {timestamps: true});
 
 productSchema.pre("save", function (next) {
     console.log(this);

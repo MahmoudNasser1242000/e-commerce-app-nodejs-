@@ -16,7 +16,12 @@ const categorySchema = new Schema({
         required: true, 
     },
     img: String,
-});
+    createdBy: {
+        type: Schema.Types.ObjectId, 
+        ref: "User",
+        required: true
+    },
+}, {timestamps: true});
 
 categorySchema.pre("save", function (next) {
     this.img = "http://localhost:3000/uploads/" + this.img

@@ -137,8 +137,13 @@ const userIdSchema = Joi.object({
     userId: Joi.string().hex().length(24).required(),
 })
 
+const createdBySchema = Joi.object({
+    createdBy: Joi.string().hex().length(24).required(),
+})
+
 export {
     addUserSchema,
     updateUserSchema,
-    userIdSchema
+    userIdSchema,
+    createdBySchema
 }

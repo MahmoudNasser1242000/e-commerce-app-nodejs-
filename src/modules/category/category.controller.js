@@ -8,12 +8,17 @@ import ApiFeatures from "../../../utils/apiFeaturesClass.js";
 const addCategorey = errorAsyncHandler(async (req, res, next) => {
     req.body.slug = slugify(req.body.name);
     if (req.file) req.body.img = req.file.filename;
+    req.body.createdBy = req.user._id;
     const category = await categoryModel.insertMany(req.body);
     res.status(201).json({ msg: "Category added successfully", category });
 });
 
 const getAllCategories = errorAsyncHandler(async (req, res, next) => {
-    const apiFeatures = new ApiFeatures(categoryModel.find(), req.query)
+    let filterObj = {};
+    if (req.params.createdBy) {
+        filterObj.createdBy = req.params.createdBy
+    }
+    const apiFeatures = new ApiFeatures(categoryModel.find(filterObj), req.query)
         .pagination()
         .filter()
         .sort()

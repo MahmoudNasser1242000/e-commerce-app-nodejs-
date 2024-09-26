@@ -20,7 +20,12 @@ const subCategorySchema = new Schema({
         ref: "Category", 
         required: true
     },
-});
+    createdBy: {
+        type: Schema.Types.ObjectId, 
+        ref: "User",
+        required: true
+    },
+}, {timestamps: true});
 
 const subCategoryModel = mongoose.model('SubCategory', subCategorySchema);
 export default subCategoryModel

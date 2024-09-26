@@ -35,8 +35,7 @@ const userSchema = new Schema({
         type: Boolean,
         default: false
     },
-    // profile: String,
-});
+}, {timestamps: true});
 
 userSchema.pre("save", function (next) {
     this.profileImg = "http://localhost:3000/uploads/" + this.profileImg;

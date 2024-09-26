@@ -23,7 +23,12 @@ const reviewSchema = new Schema({
         ref: "Product", 
         required: true
     },
-});
+    createdBy: {
+        type: Schema.Types.ObjectId, 
+        ref: "User",
+        required: true
+    },
+}, {timestamps: true});
 
 const reviewModel = mongoose.model('Review', reviewSchema);
 export default reviewModel
