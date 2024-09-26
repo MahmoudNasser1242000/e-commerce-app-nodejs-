@@ -13,11 +13,6 @@ const reviewSchema = new Schema({
         max: 5,
         required: true, 
     },
-    user: {
-        type: Schema.Types.ObjectId, 
-        ref: "User", 
-        required: true
-    },
     product: {
         type: Schema.Types.ObjectId, 
         ref: "Product", 
@@ -29,6 +24,11 @@ const reviewSchema = new Schema({
         required: true
     },
 }, {timestamps: true});
+
+reviewSchema.pre(/^find/, function (next) {
+    this.populate("createdBy", "name");
+    next()
+})
 
 const reviewModel = mongoose.model('Review', reviewSchema);
 export default reviewModel

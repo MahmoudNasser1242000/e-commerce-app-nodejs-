@@ -15,9 +15,8 @@ const addReviewSchema = Joi.object({
             "string.min": "Rate must be at least 0",
             "string.max": "Rate must be at most 5"
         }),
-    
+
     product: Joi.string().hex().length(24).required(),
-    user: Joi.string().hex().length(24).required(),
 })
 
 const updateReviewSchema = Joi.object({
@@ -37,9 +36,8 @@ const updateReviewSchema = Joi.object({
             "string.min": "Rate must be at least 0",
             "string.max": "Rate must be at most 5"
         }),
-    
+
     product: Joi.string().hex().length(24).optional(),
-    user: Joi.string().hex().length(24).optional(),
 })
 
 const reviewIdSchema = Joi.object({

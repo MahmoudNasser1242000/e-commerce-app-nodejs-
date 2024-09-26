@@ -1,5 +1,5 @@
 import reviewModel from "../../../database/models/review.model.js";
-import { findById, findByIdAndDelete } from "../../../services/apiHandler.js";
+import { findById, findByIdAndDelete, findOne } from "../../../services/apiHandler.js";
 import errorAsyncHandler from "../../../services/errorAsyncHandler.js";
 import ApiFeatures from "../../../utils/apiFeaturesClass.js";
 import AppError from "../../../utils/errorClass.js";
@@ -28,13 +28,13 @@ const getAllReviews = errorAsyncHandler(async (req, res, next) => {
         .json({ length: reviews.length, page: apiFeatures.page, reviews });
 })
 
-const getSpecificReview = findById(reviewModel, "reviewId", "review")
+const getSpecificReview = findOne(reviewModel, "reviewId", "review")
 
 const updateReview = errorAsyncHandler(async (req, res, next) => {
     const {reviewId} = req.params;
-    const review = await reviewModel.findOneAndUpdate({_id: reviewId}, {...req.body}, {new: true});
+    const review = await reviewModel.findOneAndUpdate({_id: reviewId, createdBy: req.user._id}, {...req.body}, {new: true});
     if (!review) 
-        return next(new AppError("Cant not find review with this id", 400))
+        return next(new AppError("Review not found", 400))
     res.status(202).json({msg: "Review updated successfully", review});
 })
 

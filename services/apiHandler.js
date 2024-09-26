@@ -10,6 +10,15 @@ const findById = (model, id, coll) => {
     })
 }
 
+const findOne = (model, id, coll) => {
+    return errorAsyncHandler(async (req, res, next) => {
+        const doc = await model.findOne({_id: req.params[id]});
+        if (!doc) 
+            return next(new AppError(`Cant not find ${coll} with this id`, 400))
+        res.status(200).json({[coll]: doc});
+    })
+}
+
 const findByIdAndDelete = (model, id, coll) => {
     return errorAsyncHandler(async (req, res, next) => {
         const doc = await model.findByIdAndDelete({_id: req.params[id]});
@@ -21,5 +30,6 @@ const findByIdAndDelete = (model, id, coll) => {
 
 export {
     findById,
+    findOne,
     findByIdAndDelete
 }

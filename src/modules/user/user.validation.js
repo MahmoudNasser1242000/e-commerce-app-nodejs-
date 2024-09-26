@@ -48,13 +48,13 @@ const addUserSchema = Joi.object({
             "any.valid": "Status must be one of user or admin",
         }),
 
-    isBlocked: Joi.boolean()
+    isBlocked: Joi.string()
         .valid("admin", "user")
         .messages({
             "string.base": "Field type must be boolean ",
         }),
 
-    confirmEmail: Joi.boolean()
+    confirmEmail: Joi.string()
         .valid("admin", "user")
         .messages({
             "string.base": "Field type must be boolean ",

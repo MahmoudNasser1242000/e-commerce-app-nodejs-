@@ -3,12 +3,16 @@ import { addReview, deleteReview, getAllReviews, getSpecificReview, updateReview
 import schemaValidation from "../../../utils/schemaValidation.js";
 import { addReviewSchema, reviewIdSchema, updateReviewSchema } from "./review.validation.js";
 import protectAuth from "../../middlewares/protectAuth.js";
+import checkReviewOwner from "../../middlewares/checkReviewOwner.js";
+import checkProductId from "../../middlewares/checkProductId.js";
 
 const reviewRoter = Router({mergeParams: true});
 
 reviewRoter.route("/")
     .post(
         protectAuth,
+        checkProductId,
+        checkReviewOwner,
         schemaValidation(addReviewSchema),
         addReview
     )
