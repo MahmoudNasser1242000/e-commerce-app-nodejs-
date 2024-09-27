@@ -3,7 +3,7 @@ import userModel from "../../../database/models/user.model.js";
 
 const addToWishlist = errorAsyncHandler(async (req, res, next) => {
     const { product } = req.params;
-    const user = await userModel.findOneAndUpdate(
+    const user = await userModel.findByIdAndUpdate(
         { _id: req.user._id },
         {
             $addToSet: { wishlist: product },
@@ -15,7 +15,7 @@ const addToWishlist = errorAsyncHandler(async (req, res, next) => {
 
 const removeFromWishlist = errorAsyncHandler(async (req, res, next) => {
     const { product } = req.params;
-    const user = await userModel.findOneAndUpdate(
+    const user = await userModel.findByIdAndUpdate(
         { _id: req.user._id },
         {
             $pull: { wishlist: product },
