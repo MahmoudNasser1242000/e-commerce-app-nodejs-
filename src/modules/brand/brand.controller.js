@@ -2,7 +2,7 @@ import slugify from "slugify";
 import errorAsyncHandler from "../../../services/errorAsyncHandler.js";
 import brandModel from "../../../database/models/brand.model.js";
 import AppError from "../../../utils/errorClass.js";
-import { findById } from "../../../services/apiHandler.js";
+import { findById, findByIdAndDelete } from "../../../services/apiHandler.js";
 import ApiFeatures from "../../../utils/apiFeaturesClass.js";
 
 const addBrand = errorAsyncHandler(async (req, res, next) => {
@@ -49,6 +49,6 @@ const updateBrand = errorAsyncHandler(async (req, res, next) => {
     res.status(202).json({ msg: "Brand updated successfully", brand });
 });
 
-const deleteBrand = findById(brandModel, "brandId", "brand");
+const deleteBrand = findByIdAndDelete(brandModel, "brandId", "brand");
 
 export { addBrand, getAllBrands, getSpecificBrand, updateBrand, deleteBrand };

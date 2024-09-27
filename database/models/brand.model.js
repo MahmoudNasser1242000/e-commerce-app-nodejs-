@@ -23,16 +23,8 @@ const brandSchema = new Schema({
     },
 }, {timestamps: true});
 
-brandSchema.pre("save", function (next) {
-    this.logo = "http://localhost:3000/uploads/" + this.logo
-    next()
-})
-
-brandSchema.pre("findOneAndUpdate", function (next) {
-    if (this._update.logo) {
-        this._update.logo = "http://localhost:3000/uploads/" + this._update.logo;
-    }
-    next()
+brandSchema.post("init", function (doc) {
+    doc.logo = "http://localhost:3000/uploads/" + doc.logo
 })
 
 const brandModel = mongoose.model('Brand', brandSchema);

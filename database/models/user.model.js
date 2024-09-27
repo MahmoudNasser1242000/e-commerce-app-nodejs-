@@ -47,19 +47,17 @@ const userSchema = new Schema({
     }]
 }, {timestamps: true});
 
-userSchema.pre("save", function (next) {
-    this.profileImg = "http://localhost:3000/uploads/" + this.profileImg;
+userSchema.post("init", function (doc) {
+    doc.profileImg = "http://localhost:3000/uploads/" + doc.profileImg;
+})
 
+userSchema.pre("save", function (next) {
     const hashPassword = bcrypt.hashSync(this.password, 8);
     this.password = hashPassword
     next()
 })
 
 userSchema.pre("findOneAndUpdate", function (next) {
-    if (this._update.profileImg) {
-        this._update.profileImg = "http://localhost:3000/uploads/" + this._update.profileImg;
-    }
-
     if (this._update.password) {
         const hashPassword = bcrypt.hashSync(this._update.password, 8);
         this._update.password = hashPassword    

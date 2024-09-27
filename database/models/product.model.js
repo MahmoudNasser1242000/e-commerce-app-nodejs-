@@ -73,26 +73,12 @@ const productSchema = new Schema(
     { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
-productSchema.pre("save", function (next) {
-    this.imgCover = "http://localhost:3000/uploads/" + this.imgCover;
-    this.images = this.images?.map(
+productSchema.post("init", function (doc) {
+    doc.imgCover = "http://localhost:3000/uploads/" + doc.imgCover;
+    doc.images = doc.images?.map(
         (img) => "http://localhost:3000/uploads/" + img
     );
-    next();
-});
-
-productSchema.pre("findOneAndUpdate", function (next) {
-    if (this._update.imgCover) {
-        this._update.imgCover =
-            "http://localhost:3000/uploads/" + this._update.imgCover;
-    }
-    if (this._update.images) {
-        this._update.images = this._update.images?.map(
-            (img) => "http://localhost:3000/uploads/" + img
-        );
-    }
-    next();
-});
+})
 
 productSchema.pre(/^find/, function (next) {
     this.populate("productReviews", "name comment -product");
