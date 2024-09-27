@@ -25,11 +25,6 @@ const couponSchema = new Schema({
         enum: ["active", "inActive"],
         default: "inActive", 
     },
-    product: {
-        type: Schema.Types.ObjectId, 
-        ref: "Product", 
-        required: true
-    },
     createdBy: {
         type: Schema.Types.ObjectId, 
         ref: "User",

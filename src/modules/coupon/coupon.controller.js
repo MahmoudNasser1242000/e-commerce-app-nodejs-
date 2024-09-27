@@ -1,8 +1,9 @@
 import couponModel from "../../../database/models/coupon.model.js";
-import { findById, findByIdAndDelete } from "../../../services/apiHandler.js";
+import { findByIdAndDelete } from "../../../services/apiHandler.js";
 import errorAsyncHandler from "../../../services/errorAsyncHandler.js";
 import ApiFeatures from "../../../utils/apiFeaturesClass.js";
 import AppError from "../../../utils/errorClass.js";
+import QRCode from 'qrcode'
 
 const addCoupon = errorAsyncHandler(async (req, res, next) => {
     // req.body.code = Math.round(Math.random() * 9999)
@@ -27,7 +28,14 @@ const getAllCoupons = errorAsyncHandler(async (req, res, next) => {
     res.status(200).json({length: coupons.length, page: apiFeatures.page, coupons});
 })
 
-const getSpecificCoupon = findById(couponModel, "couponId", "coupon")
+const getSpecificCoupon = errorAsyncHandler(async (req, res, next) => {
+    const coupon = await couponModel.findOne({_id: req.params.couponId});
+    if (!coupon) 
+        return next(new AppError(`Cant not find coupon with this id`, 400))
+
+    const QR_Code = await QRCode.toDataURL(coupon.code)
+    res.status(200).json({coupon, QRCode: QR_Code});
+})
 
 const updateCoupon = errorAsyncHandler(async (req, res, next) => {
     const {couponId} = req.params;

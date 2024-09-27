@@ -24,20 +24,16 @@ const addCouponSchema = Joi.object({
         }),
 
     status: Joi.string()
-        .valid("active", "inActive"),
+        .valid("active", "inActive")
+        .messages({
+            "string.valid": "Type must be one of percentage or fixed",
+        }),
     
-    product: Joi.string().hex().length(24).required(),
-    admin: Joi.string().hex().length(24).required(),
+    createdBy: Joi.string().hex().length(24).optional(),
 })
 
 const updateCouponSchema = Joi.object({
     couponId: Joi.string().hex().length(24).required(),
-    code: Joi.string()
-        .min(5)
-        .optional()
-        .messages({
-            "string.min": "Coupon code must be at least 5 characters"
-        }),
 
     expire: Joi.date().optional(),
 
@@ -61,9 +57,6 @@ const updateCouponSchema = Joi.object({
         .messages({
             "string.valid": "Status must be one of active or inactive",
         }),
-    
-    product: Joi.string().hex().length(24).optional(),
-    admin: Joi.string().hex().length(24).optional(),
 })
 
 const couponIdSchema = Joi.object({
