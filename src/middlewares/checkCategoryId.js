@@ -3,7 +3,7 @@ import errorAsyncHandler from "../../services/errorAsyncHandler.js";
 import AppError from "../../utils/errorClass.js";
 
 const checkCategoryId = errorAsyncHandler(async (req, res, next) => {
-    const category = await categoryModel.findById(req.body.category || req.params.category);
+    const category = await categoryModel.findOne(req.body.category || req.params.category);
 
     if (!category) 
         return next(new AppError("Can not find category with this id", 400));

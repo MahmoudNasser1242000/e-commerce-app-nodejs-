@@ -7,6 +7,8 @@ const checkProductId = errorAsyncHandler(async (req, res, next) => {
 
     if (!product) 
         return next(new AppError("Can not find product with this id", 400));
+    
+    req.product = product
     next()
 })
 
