@@ -3,6 +3,8 @@ import AppError from "../../../utils/errorClass.js";
 import orderModel from "../../../database/models/order.model.js";
 import cartModel from "../../../database/models/cart.model.js";
 import productModel from "../../../database/models/product.model.js";
+import Stripe from 'stripe';
+const stripe = new Stripe('sk_test_51MEl47Ismuy6V5j4HrttIl1Svql7ULogUr0OG3GBeYzd69V0f2RL5SNAXDI4DFLlCM9W13UlZukSUbtjQBordSDH00N5Wpz5Fi');
 
 const UpdateProductsCount = async (cart) => {
     const options = cart.cartItems.map((item) => {
@@ -46,4 +48,32 @@ const getAllUserOrders = errorAsyncHandler(async (req, res, next) => {
     res.status(200).json({ length: orders.length, orders });
 });
 
-export { createOrder, getAllOrders, getAllUserOrders };
+const createCheckoutSession = errorAsyncHandler(async (req, res, next) => {
+    let cart = await cartModel.findOne({ owner: req.user._id });
+    if (!cart)
+        return next(new AppError("Can not find cart for this user", 400));
+    const totalOrderPrice = cart.totalPriceAfterDiscount || cart.totalPrice;
+    const session = await stripe.checkout.sessions.create({
+        line_items: [{
+            price_data: {
+                currency: "egp",
+                unit_amount: totalOrderPrice * 100,
+                product_data: {
+                    name: req.user.name
+                }
+            },
+            quantity: 1,
+        }],
+        mode: "payment",
+        cancel_url: "https://hambozoo.netlify.app/#/cart",
+        success_url: "https://hambozoo.netlify.app/#//orders",
+
+        customer_email: req.user.email,
+        client_reference_id: cart._id.toString(),
+        metadata: req.body.shippingAddress
+    })
+
+    res.status(200).json({ msg: "Session created successfully", session });
+})
+
+export { createOrder, getAllOrders, getAllUserOrders, createCheckoutSession };

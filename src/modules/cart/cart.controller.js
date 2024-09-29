@@ -32,12 +32,12 @@ const addToCart = errorAsyncHandler(async (req, res, next) => {
     let cart = await cartModel.findOne({ owner: req.user._id });
 
     if (!cart) {
-        const cart = new cartModel({
+        const addCart = new cartModel({
             owner: req.user._id,
             cartItems: [{ ...req.body, price: req.product.price }],
             totalPrice: req.product.price
         })
-        cart = await cart.save()
+        cart = await addCart.save()
     } else {
         const product = cart.cartItems.find((item) => item.product.toString() === req.product._id.toString());
         if (product) {
