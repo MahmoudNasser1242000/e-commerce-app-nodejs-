@@ -1,7 +1,7 @@
-import { Router } from "express";
+import express, { Router } from "express";
 import schemaValidation from "../../../utils/schemaValidation.js";
 import protectAuth from "../../middlewares/protectAuth.js";
-import { createCheckoutSession, createOrder, getAllOrders, getAllUserOrders } from "./order.controller.js";
+import { createCheckoutSession, createOnlineOrder, createOrder, getAllOrders, getAllUserOrders } from "./order.controller.js";
 import { createCheckoutSessionSchema, createOrderSchema } from "./order.validation.js";
 import roleAccess from "../../middlewares/RoleAccess.js";
 
@@ -19,6 +19,14 @@ orderRouter.post(
     schemaValidation(createCheckoutSessionSchema),
     createCheckoutSession
 )
+
+orderRouter.post(
+    "/api/webhook",
+    express.raw({ type: 'application/json' }),
+    createOnlineOrder
+)
+
+// app.post('/api/webhook/', express.raw({ type: 'application/json' }), );
 
 orderRouter
     .route("/")

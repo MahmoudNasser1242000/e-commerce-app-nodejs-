@@ -5,6 +5,7 @@ import cartModel from "../../../database/models/cart.model.js";
 import productModel from "../../../database/models/product.model.js";
 import Stripe from 'stripe';
 import dotenv from "dotenv"
+import userModel from "../../../database/models/user.model.js";
 dotenv.config()
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -79,4 +80,34 @@ const createCheckoutSession = errorAsyncHandler(async (req, res, next) => {
     res.status(200).json({ msg: "Session created successfully", session });
 })
 
-export { createOrder, getAllOrders, getAllUserOrders, createCheckoutSession };
+const createOnlineOrder = errorAsyncHandler(async (req, res, next) => {
+    const sig = req.headers['stripe-signature'];
+
+    let event = stripe.webhooks.constructEvent(req.body, sig, "whsec_6ejlYlXKbKEe6fieTHy8P9qDdTk4OcIw");
+
+    if (event.type === "checkout.session.completed") {
+        const checkout = event.data.object;
+
+        let cart = await cartModel.findOne({ _id: checkout.client_reference_id });
+        let user = await userModel.findOne({ email: checkout.customer_email });
+
+        const order = new orderModel({
+            owner: user._id,
+            orderItems: cart.cartItems,
+            shippingAddress: checkout.metadata,
+            totalOrderPrice: checkout.amount_total / 100,
+            paymentType:"card",
+            ispaid: true,
+            paidAt: new Date()
+        })
+        await order.save();
+
+        await UpdateProductsCount(cart)
+
+        await cartModel.findOneAndDelete({ _id: checkout.client_reference_id })
+
+        res.status(201).json({ msg: "Order created successfully", checkout });
+    }
+})
+
+export { createOrder, getAllOrders, getAllUserOrders, createCheckoutSession, createOnlineOrder };
