@@ -7,7 +7,13 @@ import dotenv from "dotenv"
 dotenv.config()
 
 const app = express();
-app.use(express.json())
+app.use((req, res, next) => {
+    if (req.originalUrl === "/order/webhooks") {
+        next()
+    } else {
+        express.json()(req, res, next)
+    }
+})
 app.use("/uploads", express.static("uploads"))
 
 app.use(cors())
