@@ -21,7 +21,7 @@ orderRouter.post(
 )
 
 orderRouter.post(
-    "/api/webhook",
+    "/webhooks",
     express.raw({ type: 'application/json' }),
     createOnlineOrder
 )
