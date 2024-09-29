@@ -4,6 +4,7 @@ import brandRouter from "./modules/brand/brand.routes.js";
 import cartRouter from "./modules/cart/cart.routes.js";
 import categoryRouter from "./modules/category/category.routes.js";
 import couponRoter from "./modules/coupon/coupon.routes.js";
+import orderRouter from "./modules/order/order.routes.js";
 import productRouter from "./modules/product/product.routes.js";
 import reviewRoter from "./modules/review/review.routes.js";
 import subCategoryRouter from "./modules/subCategory/subCategory.routes.js";
@@ -22,6 +23,7 @@ const Bootstrap = (app) => {
     app.use("/api/v1/wishlist", wishlistRouter)
     app.use("/api/v1/address", addressRouter)
     app.use("/api/v1/cart", cartRouter)
+    app.use("/api/v1/order", orderRouter)
 }
 
 export default Bootstrap;
