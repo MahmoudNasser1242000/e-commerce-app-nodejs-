@@ -43,12 +43,12 @@ const createOrder = errorAsyncHandler(async (req, res, next) => {
 });
 
 const getAllOrders = errorAsyncHandler(async (req, res, next) => {
-    let orders = await orderModel.findOne({})
+    let orders = await orderModel.find({})
     res.status(200).json({ length: orders.length, orders });
 });
 
 const getAllUserOrders = errorAsyncHandler(async (req, res, next) => {
-    let orders = await orderModel.findOne({owner: req.user._id})
+    let orders = await orderModel.find({owner: req.user._id})
     res.status(200).json({ length: orders.length, orders });
 });
 
