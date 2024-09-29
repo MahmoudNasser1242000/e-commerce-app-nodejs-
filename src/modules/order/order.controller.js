@@ -83,7 +83,7 @@ const createCheckoutSession = errorAsyncHandler(async (req, res, next) => {
 const createOnlineOrder = errorAsyncHandler(async (req, res, next) => {
     const sig = req.headers['stripe-signature'];
 
-    let event = stripe.webhooks.constructEvent(req.body, sig, "whsec_6ejlYlXKbKEe6fieTHy8P9qDdTk4OcIw");
+    let event = stripe.webhooks.constructEvent(req.body, sig, "whsec_hQed6a2FZivxiyEj0HzjvLO4wA02DYKf");
 
     if (event.type === "checkout.session.completed") {
         const checkout = event.data.object;
