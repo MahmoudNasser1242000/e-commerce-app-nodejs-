@@ -4,7 +4,10 @@ import orderModel from "../../../database/models/order.model.js";
 import cartModel from "../../../database/models/cart.model.js";
 import productModel from "../../../database/models/product.model.js";
 import Stripe from 'stripe';
-const stripe = new Stripe('sk_test_51MEl47Ismuy6V5j4HrttIl1Svql7ULogUr0OG3GBeYzd69V0f2RL5SNAXDI4DFLlCM9W13UlZukSUbtjQBordSDH00N5Wpz5Fi');
+import dotenv from "dotenv"
+dotenv.config()
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const UpdateProductsCount = async (cart) => {
     const options = cart.cartItems.map((item) => {

@@ -2,9 +2,15 @@ import express from "express";
 import AppError from "./utils/errorClass.js";
 import dbconnection from "./database/dbConnection.js";
 import Bootstrap from "./src/bootstrap.js";
+import cors from "cors"
+import dotenv from "dotenv"
+dotenv.config()
+
 const app = express();
 app.use(express.json())
 app.use("/uploads", express.static("uploads"))
+
+app.use(cors())
 
 Bootstrap(app)
 
@@ -23,5 +29,5 @@ app.use((err, req, res, next) =>
         .status(err.statusCode || 500)
         .json({ error: "Error", message: err.message, stack: err.stack })
 );
-const port = 3000;
+const port = process.env.SERVER_PORT || 3000;
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

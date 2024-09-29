@@ -3,6 +3,8 @@ import AppError from "../../../utils/errorClass.js";
 import userModel from "../../../database/models/user.model.js";
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt";
+import dotenv from "dotenv"
+dotenv.config()
 
 const signUp = errorAsyncHandler(async (req, res, next) => {
     if (req.file) req.body.profileImg = req.file.filename;
@@ -21,7 +23,7 @@ const signIn = errorAsyncHandler(async (req, res, next) => {
     if (!passMatched)
         return next(new AppError("Worng email or password", 400));
 
-    var token = jwt.sign({ name: user.name, userId: user._id, role: user.role }, 'Login_Auth');
+    var token = jwt.sign({ name: user.name, userId: user._id, role: user.role }, process.env.TOKEN_SECRET_KEY);
     res.status(201).json({ user, token });
 });
 
