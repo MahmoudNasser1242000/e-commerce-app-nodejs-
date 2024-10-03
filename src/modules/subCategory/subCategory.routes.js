@@ -17,6 +17,7 @@ import productRouter from "../product/product.routes.js";
 import checkSubCategory from "../../middlewares/checkSubCategory.js";
 import protectAuth from "../../middlewares/protectAuth.js";
 import roleAccess from "../../middlewares/RoleAccess.js";
+import checkSubCategoryName from "../../middlewares/checkSubCategoryName.js";
 
 const subCategoryRouter = Router({ mergeParams: true });
 
@@ -37,26 +38,32 @@ subCategoryRouter
         roleAccess("admin"),
         schemaValidation(addSubCategorySchema),
         checkCategoryId,
+        checkSubCategoryName,
         addSubCategorey
     );
 
 subCategoryRouter
-    .route("/:subCategoryId")
+    .route("/:subCategory")
     .get(
         protectAuth,
         schemaValidation(subCategoryIdSchema),
+        checkSubCategory,
         getSpecificSubCategory
     )
     .patch(
         protectAuth,
         roleAccess("admin"),
         schemaValidation(updateSubCategorySchema),
+        checkSubCategory,
+        checkCategoryId,
+        checkSubCategoryName,
         updateSubCategory
     )
     .delete(
         protectAuth,
         roleAccess("admin"),
         schemaValidation(subCategoryIdSchema),
+        checkSubCategory,
         deleteSubCategory
     );
 

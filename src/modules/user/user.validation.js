@@ -73,7 +73,7 @@ const addUserSchema = Joi.object({
 })
 
 const updateUserSchema = Joi.object({
-    userId: Joi.string().hex().length(24).required(),
+    user: Joi.string().hex().length(24).required(),
     name: Joi.string()
         .min(3)
         .optional()
@@ -134,7 +134,7 @@ const updateUserSchema = Joi.object({
 })
 
 const userIdSchema = Joi.object({
-    userId: Joi.string().hex().length(24).required(),
+    user: Joi.string().hex().length(24).required(),
 })
 
 const createdBySchema = Joi.object({

@@ -89,13 +89,15 @@ userRouter
     .get(protectAuth, roleAccess("admin"), getAllUsers);
 
 userRouter
-    .route("/:userId")
-    .get(protectAuth, schemaValidation(userIdSchema), getSpecificUser)
+    .route("/:user")
+    .get(protectAuth, roleAccess("admin"), schemaValidation(userIdSchema), checkUserId, getSpecificUser)
     .patch(
         protectAuth,
         uploadSingle("profileImg"),
         schemaValidation(updateUserSchema),
+        checkUserEmailExist,
+        checkUserId,
         updateUser
     )
-    .delete(protectAuth, schemaValidation(userIdSchema), deleteUser);
+    .delete(protectAuth, schemaValidation(userIdSchema), checkUserId, deleteUser);
 export default userRouter;

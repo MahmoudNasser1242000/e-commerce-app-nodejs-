@@ -5,6 +5,10 @@ import AppError from "../../../utils/errorClass.js";
 import { findById, findByIdAndDelete } from "../../../services/apiHandler.js";
 import ApiFeatures from "../../../utils/apiFeaturesClass.js";
 
+// @desc      add brand
+// @method     POST
+// @route     /api/v1/brands/
+// @access    admin
 const addBrand = errorAsyncHandler(async (req, res, next) => {
     req.body.slug = slugify(req.body.name);
     if (req.file) req.body.logo = req.file.filename;
@@ -14,6 +18,10 @@ const addBrand = errorAsyncHandler(async (req, res, next) => {
     res.status(201).json({ msg: "Brand added successfully", brand });
 });
 
+// @desc      get all brands
+// @method     GET
+// @route     /api/v1/brands/
+// @access    public
 const getAllBrands = errorAsyncHandler(async (req, res, next) => {
     let filterObj = {};
     if (req.params.createdBy) {
@@ -31,16 +39,24 @@ const getAllBrands = errorAsyncHandler(async (req, res, next) => {
         .json({ length: brands.length, page: apiFeatures.page, brands });
 });
 
-const getSpecificBrand = findById(brandModel, "brandId", "brand");
+// @desc      get specific brand
+// @method     GET
+// @route     /api/v1/brands/:brand
+// @access    public
 
+const getSpecificBrand = findById(brandModel, "brand", "brand");
+
+// @desc      update specific brand
+// @method     PATCH
+// @route     /api/v1/brands/:brand
+// @access    admin
 const updateBrand = errorAsyncHandler(async (req, res, next) => {
-    const { brandId } = req.params;
     const { name } = req.body;
     if (name) req.body.slug = slugify(name);
 
     if (req.file) req.body.logo = req.file.filename;
     const brand = await brandModel.findOneAndUpdate(
-        { _id: brandId },
+        { _id: req.params.brand },
         { ...req.body },
         { new: true }
     );
@@ -49,6 +65,10 @@ const updateBrand = errorAsyncHandler(async (req, res, next) => {
     res.status(202).json({ msg: "Brand updated successfully", brand });
 });
 
-const deleteBrand = findByIdAndDelete(brandModel, "brandId", "brand");
+// @desc      delete specific brand
+// @method     DELETE
+// @route     /api/v1/brands/:brand
+// @access    admin
+const deleteBrand = findByIdAndDelete(brandModel, "brand", "brand");
 
 export { addBrand, getAllBrands, getSpecificBrand, updateBrand, deleteBrand };

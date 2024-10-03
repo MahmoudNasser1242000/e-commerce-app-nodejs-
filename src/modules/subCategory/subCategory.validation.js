@@ -7,20 +7,22 @@ const addSubCategorySchema = Joi.object({
         .messages({
             "string.min": "Brand name must be at least 3 characters"
         }),
+    category: Joi.string().hex().length(24).required(),
 })
 
 const updateSubCategorySchema = Joi.object({
-    subCategoryId: Joi.string().hex().length(24).required(),
+    subCategory: Joi.string().hex().length(24).required(),
     name: Joi.string()
         .min(3)
         .optional()
         .messages({
             "string.min": "Brand name must be at least 3 characters"
         }),
+    category: Joi.string().hex().length(24).optional(),
 })
 
 const subCategoryIdSchema = Joi.object({
-    subCategoryId: Joi.string().hex().length(24).required(),
+    subCategory: Joi.string().hex().length(24).required(),
 })
 
 export {

@@ -6,6 +6,10 @@ import bcrypt from "bcrypt";
 import dotenv from "dotenv"
 dotenv.config()
 
+// @desc      signup user
+// @method     POST
+// @route     /api/v1/auth/signUp
+// @access    public
 const signUp = errorAsyncHandler(async (req, res, next) => {
     if (req.file) req.body.profileImg = req.file.filename;
     const addUser = new userModel({ ...req.body });
@@ -13,6 +17,10 @@ const signUp = errorAsyncHandler(async (req, res, next) => {
     res.status(201).json({ msg: "User added successfully", user });
 });
 
+// @desc      signin user
+// @method     POST
+// @route     /api/v1/auth/signIn
+// @access    public
 const signIn = errorAsyncHandler(async (req, res, next) => {
     const {email, password} = req.body
     const user = await userModel.findOne({email});
@@ -27,6 +35,10 @@ const signIn = errorAsyncHandler(async (req, res, next) => {
     res.status(201).json({ user, token });
 });
 
+// @desc      change user password
+// @method     PATCH
+// @route     /api/v1/auth/changePassword
+// @access    public
 const changePassword = errorAsyncHandler(async (req, res, next) => {
     const { password, newPassword } = req.body;
     const loggedUser = req.user;

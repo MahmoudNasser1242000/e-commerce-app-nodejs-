@@ -18,6 +18,7 @@ import checkCategoryId from "../../middlewares/checkCategoryId.js";
 import productRouter from "../product/product.routes.js";
 import protectAuth from "../../middlewares/protectAuth.js";
 import roleAccess from "../../middlewares/RoleAccess.js";
+import checkCategoryName from "../../middlewares/checkCategoryName.js";
 
 const categoryRouter = Router({mergeParams: true});
 
@@ -45,24 +46,28 @@ categoryRouter
         roleAccess("admin"),
         uploadSingle("img"),
         schemaValidation(addCategorySchema),
+        checkCategoryName,
         addCategorey
     )
     .get(protectAuth, getAllCategories);
 
 categoryRouter
-    .route("/:categoryId")
-    .get(protectAuth, schemaValidation(categoryIdSchema), getSpecificCategory)
+    .route("/:category")
+    .get(protectAuth, schemaValidation(categoryIdSchema), checkCategoryId, getSpecificCategory)
     .patch(
         protectAuth,
         roleAccess("admin"),
         uploadSingle("img"),
         schemaValidation(updateCategorySchema),
+        checkCategoryId,
+        checkCategoryName,
         updateCategory
     )
     .delete(
         protectAuth,
         roleAccess("admin"),
         schemaValidation(categoryIdSchema),
+        checkCategoryId,
         deleteCategory
     );
 export default categoryRouter;

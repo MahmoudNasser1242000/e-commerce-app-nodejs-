@@ -7,6 +7,7 @@ import checkBrandId from "../../middlewares/checkBrandId.js";
 import productRouter from "../product/product.routes.js";
 import protectAuth from "../../middlewares/protectAuth.js";
 import roleAccess from "../../middlewares/RoleAccess.js";
+import checkBrandName from "../../middlewares/checkBrandName.js";
 
 const brandRouter = Router({mergeParams: true});
 
@@ -18,6 +19,7 @@ brandRouter.route("/")
         roleAccess("admin"),
         uploadSingle("logo"),
         schemaValidation(addBrandSchema),
+        checkBrandName,
         addBrand
     )
     .get(
@@ -25,10 +27,11 @@ brandRouter.route("/")
         getAllBrands
     )
 
-brandRouter.route("/:brandId")
+brandRouter.route("/:brand")
     .get(
         protectAuth,
         schemaValidation(brandIdSchema),
+        checkBrandId,
         getSpecificBrand
     )
     .patch(
@@ -36,12 +39,15 @@ brandRouter.route("/:brandId")
         roleAccess("admin"),
         uploadSingle("logo"),
         schemaValidation(updateBrandSchema),
+        checkBrandId,
+        checkBrandName,
         updateBrand
     )
     .delete(
         protectAuth,
         roleAccess("admin"),
         schemaValidation(brandIdSchema),
+        checkBrandId,
         deleteBrand
     )
 export default brandRouter;

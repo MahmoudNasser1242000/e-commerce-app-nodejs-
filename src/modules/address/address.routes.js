@@ -6,12 +6,16 @@ import protectAuth from "../../middlewares/protectAuth.js";
 
 const addressRouter = Router();
 
-addressRouter.post(
-    "/",
-    protectAuth,
-    schemaValidation(addToAddressSchema),
-    addToAddress
-)
+addressRouter.route("/")
+    .post(
+        protectAuth,
+        schemaValidation(addToAddressSchema),
+        addToAddress
+    )
+    .get(
+        protectAuth,
+        getAllFromAddress
+    )
 
 addressRouter.route("/:address")
     .delete(
@@ -25,5 +29,4 @@ addressRouter.route("/:address")
         updateInAddress
     );
 
-addressRouter.get("/", protectAuth, getAllFromAddress);
 export default addressRouter;

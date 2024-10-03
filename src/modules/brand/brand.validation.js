@@ -21,7 +21,7 @@ const addBrandSchema = Joi.object({
 })
 
 const updateBrandSchema = Joi.object({
-    brandId: Joi.string().hex().length(24).required(),
+    brand: Joi.string().hex().length(24).required(),
     name: Joi.string()
         .min(3)
         .optional()
@@ -42,7 +42,7 @@ const updateBrandSchema = Joi.object({
 })
 
 const brandIdSchema = Joi.object({
-    brandId: Joi.string().hex().length(24).required(),
+    brand: Joi.string().hex().length(24).required(),
 })
 
 export {

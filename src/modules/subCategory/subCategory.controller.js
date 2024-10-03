@@ -5,13 +5,22 @@ import AppError from "../../../utils/errorClass.js";
 import { findById, findByIdAndDelete } from "../../../services/apiHandler.js";
 import ApiFeatures from "../../../utils/apiFeaturesClass.js";
 
+// @desc      add subCategory
+// @method     POST
+// @route     /api/v1/subCtegories/
+// @access    admin
 const addSubCategorey = errorAsyncHandler(async (req, res, next) => {
     req.body.slug = slugify(req.body.name);
     req.body.createdBy = req.user._id;
-    const subCategory = await subCategoryModel.insertMany({ ...req.body });
+    const addSubCategorey = new subCategoryModel(req.body)
+    const subCategory = await addSubCategorey.save();
     res.status(201).json({ msg: "SubCategory added successfully", subCategory });
 });
 
+// @desc      get all subCategories
+// @method     GET
+// @route     /api/v1/subCtegories/
+// @access    public
 const getAllSubCategories = errorAsyncHandler(async (req, res, next) => {
     let filterObj = {}
     if (req.params.category) 
@@ -32,19 +41,26 @@ const getAllSubCategories = errorAsyncHandler(async (req, res, next) => {
         .json({ length: subCategorys.length, page: apiFeatures.page, subCategorys });
 });
 
+// @desc      get specific subCategory
+// @method     GET
+// @route     /api/v1/subCtegories/:subCategory
+// @access    public
 const getSpecificSubCategory = findById(
     subCategoryModel,
-    "subCategoryId",
+    "subCategory",
     "subCategory"
 );
 
+// @desc      update specific subCategory
+// @method     PATCH
+// @route     /api/v1/subCtegories/:subCategory
+// @access    admin
 const updateSubCategory = errorAsyncHandler(async (req, res, next) => {
-    const { subCategoryId } = req.params;
     const { name } = req.body;
     if (name) req.body.slug = slugify(name);
 
     const subCategory = await subCategoryModel.findOneAndUpdate(
-        { _id: subCategoryId },
+        { _id: req.params.subCategory },
         { ...req.body },
         { new: true }
     );
@@ -55,9 +71,13 @@ const updateSubCategory = errorAsyncHandler(async (req, res, next) => {
         .json({ msg: "SubCategory updated successfully", subCategory });
 });
 
+// @desc      delete specific subCategory
+// @method     DELETE
+// @route     /api/v1/subCtegories/:subCategory
+// @access    admin
 const deleteSubCategory = findByIdAndDelete(
     subCategoryModel,
-    "subCategoryId",
+    "subCategory",
     "subCategory"
 );
 
