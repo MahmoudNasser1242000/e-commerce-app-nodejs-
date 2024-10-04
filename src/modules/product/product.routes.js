@@ -15,11 +15,11 @@ productRouter.route("/")
     .post(
         protectAuth,
         roleAccess("admin"),
+        uploadFields([{name: "imgCover", maxCount: 1}, {name: "images", maxCount: 8}]),
+        schemaValidation(addProductSchema),
         checkCategoryId,
         checkSubCategory,
         checkBrandId,
-        uploadFields([{name: "imgCover", maxCount: 1}, {name: "images", maxCount: 8}]),
-        schemaValidation(addProductSchema),
         addProduct
     )
     .get(
@@ -27,7 +27,7 @@ productRouter.route("/")
         getAllProducts
     )
     
-productRouter.route("/:productId")
+productRouter.route("/:product")
     .get(
         protectAuth,
         schemaValidation(productIdSchema),
@@ -36,11 +36,11 @@ productRouter.route("/:productId")
     .patch(
         protectAuth,
         roleAccess("admin"),
+        uploadFields([{name: "imgCover", maxCount: 1}, {name: "images", maxCount: 8}]),
+        schemaValidation(updateProductSchema),
         checkCategoryId,
         checkSubCategory,
         checkBrandId,
-        uploadFields([{name: "imgCover", maxCount: 1}, {name: "images", maxCount: 8}]),
-        schemaValidation(updateProductSchema),
         updateProduct
     )
     .delete(

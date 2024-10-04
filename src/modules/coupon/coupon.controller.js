@@ -5,14 +5,22 @@ import ApiFeatures from "../../../utils/apiFeaturesClass.js";
 import AppError from "../../../utils/errorClass.js";
 import QRCode from 'qrcode'
 
+// @desc      add coupon
+// @method    POST
+// @route     /api/v1/coupons/
+// @access    admin
 const addCoupon = errorAsyncHandler(async (req, res, next) => {
-    // req.body.code = Math.round(Math.random() * 9999)
+    // req.body.code = Math.floor(Math.random() * 999999)
     req.body.createdBy = req.user._id;
     const addCoupon = new couponModel({...req.body})
     const coupon = await addCoupon.save();
     res.status(201).json({msg: "Coupon added successfully", coupon});
 })
 
+// @desc      get all coupons
+// @method    GET
+// @route     /api/v1/coupons/
+// @access    public
 const getAllCoupons = errorAsyncHandler(async (req, res, next) => {
     let filterObj = {};
     if (req.params.createdBy) {
@@ -28,8 +36,12 @@ const getAllCoupons = errorAsyncHandler(async (req, res, next) => {
     res.status(200).json({length: coupons.length, page: apiFeatures.page, coupons});
 })
 
+// @desc      get specific coupon
+// @method    GET
+// @route     /api/v1/coupons/:coupon
+// @access    public
 const getSpecificCoupon = errorAsyncHandler(async (req, res, next) => {
-    const coupon = await couponModel.findOne({_id: req.params.couponId});
+    const coupon = await couponModel.findOne({_id: req.params.coupon});
     if (!coupon) 
         return next(new AppError(`Cant not find coupon with this id`, 400))
 
@@ -37,15 +49,22 @@ const getSpecificCoupon = errorAsyncHandler(async (req, res, next) => {
     res.status(200).json({coupon, QRCode: QR_Code});
 })
 
+// @desc      update specific coupon
+// @method    PATCH
+// @route     /api/v1/coupons/:coupon
+// @access    admin
 const updateCoupon = errorAsyncHandler(async (req, res, next) => {
-    const {couponId} = req.params;
-    const coupon = await couponModel.findOneAndUpdate({_id: couponId}, {...req.body}, {new: true});
+    const coupon = await couponModel.findOneAndUpdate({_id: req.params.coupon}, {...req.body}, {new: true});
     if (!coupon) 
         return next(new AppError("Cant not find coupon with this id", 400))
     res.status(202).json({msg: "Coupon updated successfully", coupon});
 })
 
-const deleteCoupon = findByIdAndDelete(couponModel, "couponId", "coupon")
+// @desc      delete specific coupon
+// @method    DELETE
+// @route     /api/v1/coupons/:coupon
+// @access    admin
+const deleteCoupon = findByIdAndDelete(couponModel, "coupon", "coupon")
 
 export {
     addCoupon,

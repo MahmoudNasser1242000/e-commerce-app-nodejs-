@@ -69,7 +69,7 @@ const addProductSchema = Joi.object({
 })
 
 const updateProductSchema = Joi.object({
-    productId: Joi.string().hex().length(24).required(),
+    product: Joi.string().hex().length(24).required(),
     title: Joi.string()
         .min(3)
         .optional()
@@ -140,7 +140,7 @@ const updateProductSchema = Joi.object({
 })
 
 const productIdSchema = Joi.object({
-    productId: Joi.string().hex().length(24).required(),
+    product: Joi.string().hex().length(24).required(),
 })
 
 export {

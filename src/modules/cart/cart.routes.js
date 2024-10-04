@@ -42,6 +42,6 @@ cartRouter
         checkProductId,
         removeFromCart
     )
-
-cartRouter.get("/", protectAuth, getAllFromCart);
+    .get(protectAuth, getAllFromCart);
+    
 export default cartRouter;

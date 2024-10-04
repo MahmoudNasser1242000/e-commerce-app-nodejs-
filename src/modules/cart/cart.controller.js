@@ -28,6 +28,10 @@ const calcTotalPriceAfterDiscount = async (cart, couponCode) => {
     }
 }
 
+// @desc      add to cart
+// @method    PATCH
+// @route     /api/v1/cart/
+// @access    public
 const addToCart = errorAsyncHandler(async (req, res, next) => {
     let cart = await cartModel.findOne({ owner: req.user._id });
 
@@ -56,6 +60,10 @@ const addToCart = errorAsyncHandler(async (req, res, next) => {
     res.status(201).json({ msg: "Product added to cart successfully", cart });
 });
 
+// @desc      update user cart
+// @method    PATCH
+// @route     /api/v1/cart/:product
+// @access    public
 const updateInCart = errorAsyncHandler(async (req, res, next) => {
     let cart = await cartModel.findOne({ owner: req.user._id });
     if (!cart)
@@ -73,17 +81,18 @@ const updateInCart = errorAsyncHandler(async (req, res, next) => {
     res.status(202).json({ msg: "Product quantity updated successfully", cart });
 });
 
+// @desc      remove from cart
+// @method    DELETE
+// @route     /api/v1/cart/:product
+// @access    public
 const removeFromCart = errorAsyncHandler(async (req, res, next) => {
     let cart = await cartModel.findOneAndUpdate(
-        { owner: req.user._id },
+        { owner: req.user._id},
         {
             $pull: { cartItems: { product: req.body.product } },
         },
         { new: true }
     );
-
-    if (!cart)
-        return next(new AppError("No cart has this product", 400));
 
     calcTotalPrice(cart)
     await calcTotalPriceAfterDiscount(cart, cart.couponCode)
@@ -91,6 +100,10 @@ const removeFromCart = errorAsyncHandler(async (req, res, next) => {
     res.status(202).json({ msg: "Product deleted from cart successfully", cart });
 });
 
+// @desc      get user cart
+// @method    GET
+// @route     /api/v1/cart/
+// @access    public
 const getAllFromCart = errorAsyncHandler(async (req, res, next) => {
     let cart = await cartModel
         .findOne({ owner: req.user._id })
@@ -103,20 +116,28 @@ const getAllFromCart = errorAsyncHandler(async (req, res, next) => {
     res.status(200).json({ cart });
 });
 
+// @desc      clear user cart
+// @method    DELETE
+// @route     /api/v1/cart/clear
+// @access    public
 const clearCart = errorAsyncHandler(async (req, res, next) => {
     const cart = await cartModel
         .findOne({ owner: req.user._id })
 
     if (!cart)
         return next(new AppError("Can not find cart for this user", 400));
+
     cart.cartItems = []
     calcTotalPrice(cart)
-    cart.discount = 0
     cart.totalPriceAfterDiscount = 0
     await cart.save()
     res.status(202).json({ cart });
 });
 
+// @desc      applay coupon
+// @method    POST
+// @route     /api/v1/cart/applayCoupon
+// @access    public
 const applayCoupon = errorAsyncHandler(async (req, res, next) => {
     const coupon = await couponModel
         .findOne({ code: req.body.code })

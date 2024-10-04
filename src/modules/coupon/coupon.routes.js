@@ -4,6 +4,7 @@ import schemaValidation from "../../../utils/schemaValidation.js";
 import { addCouponSchema, couponIdSchema, updateCouponSchema } from "./coupon.validation.js";
 import protectAuth from "../../middlewares/protectAuth.js";
 import roleAccess from "../../middlewares/RoleAccess.js";
+import checkCouponCode from "../../middlewares/checkCouponCode.js";
 
 const couponRoter = Router({mergeParams: true});
 
@@ -12,18 +13,17 @@ couponRoter.route("/")
         protectAuth,
         roleAccess("admin"),
         schemaValidation(addCouponSchema),
+        checkCouponCode,
         addCoupon
     )
     .get(
         protectAuth,
-        roleAccess("admin"),
         getAllCoupons
     )
 
-couponRoter.route("/:couponId")
+couponRoter.route("/:coupon")
     .get(
         protectAuth,
-        roleAccess("admin"),
         schemaValidation(couponIdSchema),
         getSpecificCoupon
     )

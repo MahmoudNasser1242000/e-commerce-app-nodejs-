@@ -1,9 +1,13 @@
 import reviewModel from "../../../database/models/review.model.js";
-import { findById, findByIdAndDelete, findOne } from "../../../services/apiHandler.js";
+import { findByIdAndDelete, findOne } from "../../../services/apiHandler.js";
 import errorAsyncHandler from "../../../services/errorAsyncHandler.js";
 import ApiFeatures from "../../../utils/apiFeaturesClass.js";
 import AppError from "../../../utils/errorClass.js";
 
+// @desc      add review
+// @method    POST
+// @route     /api/v1/reviews/:product
+// @access    public
 const addReview = errorAsyncHandler(async (req, res, next) => {
     req.body.createdBy = req.user._id;
     const addReview = new reviewModel({...req.body})
@@ -11,6 +15,10 @@ const addReview = errorAsyncHandler(async (req, res, next) => {
     res.status(201).json({msg: "Review added successfully", review});
 })
 
+// @desc      get all reviews
+// @method    GET
+// @route     /api/v1/reviews/
+// @access    admin
 const getAllReviews = errorAsyncHandler(async (req, res, next) => {
     let filterObj = {};
     if (req.params.createdBy) {
@@ -28,17 +36,28 @@ const getAllReviews = errorAsyncHandler(async (req, res, next) => {
         .json({ length: reviews.length, page: apiFeatures.page, reviews });
 })
 
-const getSpecificReview = findOne(reviewModel, "reviewId", "review")
+// @desc      get specific review
+// @method    GET
+// @route     /api/v1/reviews/:review
+// @access    public
+const getSpecificReview = findOne(reviewModel, "review", "review")
 
+// @desc      update specific review
+// @method    PATCH
+// @route     /api/v1/reviews/:review
+// @access    public
 const updateReview = errorAsyncHandler(async (req, res, next) => {
-    const {reviewId} = req.params;
-    const review = await reviewModel.findOneAndUpdate({_id: reviewId, createdBy: req.user._id}, {...req.body}, {new: true});
+    const review = await reviewModel.findOneAndUpdate({_id: req.params.review, createdBy: req.user._id}, {...req.body}, {new: true});
     if (!review) 
         return next(new AppError("Review not found", 400))
     res.status(202).json({msg: "Review updated successfully", review});
 })
 
-const deleteReview = findByIdAndDelete(reviewModel, "reviewId", "review")
+// @desc      delete specific review
+// @method    DELETE
+// @route     /api/v1/reviews/:review
+// @access    public
+const deleteReview = findByIdAndDelete(reviewModel, "review", "review")
 
 export {
     addReview,

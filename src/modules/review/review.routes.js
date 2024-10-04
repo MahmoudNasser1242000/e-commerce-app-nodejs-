@@ -5,23 +5,25 @@ import { addReviewSchema, reviewIdSchema, updateReviewSchema } from "./review.va
 import protectAuth from "../../middlewares/protectAuth.js";
 import checkReviewOwner from "../../middlewares/checkReviewOwner.js";
 import checkProductId from "../../middlewares/checkProductId.js";
+import roleAccess from "../../middlewares/RoleAccess.js";
 
 const reviewRoter = Router({mergeParams: true});
 
 reviewRoter.route("/")
     .post(
         protectAuth,
+        schemaValidation(addReviewSchema),
         checkProductId,
         checkReviewOwner,
-        schemaValidation(addReviewSchema),
         addReview
     )
     .get(
         protectAuth,
+        roleAccess("admin"),
         getAllReviews
     )
 
-reviewRoter.route("/:reviewId")
+reviewRoter.route("/:review")
     .get(
         protectAuth,
         schemaValidation(reviewIdSchema),

@@ -3,6 +3,7 @@ import Joi from 'joi';
 const addCouponSchema = Joi.object({
     code: Joi.string()
         .min(5)
+        .max(6)
         .required()
         .messages({
             "string.min": "Coupon code must be at least 5 characters"
@@ -33,7 +34,7 @@ const addCouponSchema = Joi.object({
 })
 
 const updateCouponSchema = Joi.object({
-    couponId: Joi.string().hex().length(24).required(),
+    coupon: Joi.string().hex().length(24).required(),
 
     expire: Joi.date().optional(),
 
@@ -60,7 +61,7 @@ const updateCouponSchema = Joi.object({
 })
 
 const couponIdSchema = Joi.object({
-    couponId: Joi.string().hex().length(24).required(),
+    coupon: Joi.string().hex().length(24).required(),
 })
 
 export {
