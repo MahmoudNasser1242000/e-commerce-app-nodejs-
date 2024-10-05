@@ -6,6 +6,7 @@ import productModel from "../../../database/models/product.model.js";
 import Stripe from 'stripe';
 import dotenv from "dotenv"
 import userModel from "../../../database/models/user.model.js";
+import ApiFeatures from "../../../utils/apiFeaturesClass.js";
 dotenv.config()
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -22,6 +23,10 @@ const UpdateProductsCount = async (cart) => {
     await productModel.bulkWrite(options)
 }
 
+// @desc      add order
+// @method    POST
+// @route     /api/v1/order/
+// @access    public
 const createOrder = errorAsyncHandler(async (req, res, next) => {
     let cart = await cartModel.findOne({ owner: req.user._id });
     if (!cart)
@@ -42,20 +47,45 @@ const createOrder = errorAsyncHandler(async (req, res, next) => {
     res.status(201).json({ msg: "Order created successfully", order });
 });
 
+// @desc      get all orders
+// @method    GET
+// @route     /api/v1/order/
+// @access    admin
 const getAllOrders = errorAsyncHandler(async (req, res, next) => {
-    let orders = await orderModel.find({})
-    res.status(200).json({ length: orders.length, orders });
+    const apiFeatures = new ApiFeatures(orderModel.find(), req.query)
+        .pagination()
+        .filter()
+        .sort()
+        .search()
+        .fields();
+    let orders = await apiFeatures.mongooseQuery;
+    res.status(200).json({ length: orders.length, page: apiFeatures.page, orders });
 });
 
+// @desc      get my orders
+// @method    GET
+// @route     /api/v1/order/myOrders
+// @access    public
 const getAllUserOrders = errorAsyncHandler(async (req, res, next) => {
-    let orders = await orderModel.find({owner: req.user._id})
-    res.status(200).json({ length: orders.length, orders });
+    const apiFeatures = new ApiFeatures(orderModel.find({owner: req.user._id}), req.query)
+        .pagination()
+        .filter()
+        .sort()
+        .search()
+        .fields();
+    let orders = await apiFeatures.mongooseQuery;
+    res.status(200).json({ length: orders.length, page: apiFeatures.page, orders });
 });
 
+// @desc      create checkout session
+// @method    POST
+// @route     /api/v1/order/checkout
+// @access    public
 const createCheckoutSession = errorAsyncHandler(async (req, res, next) => {
     let cart = await cartModel.findOne({ owner: req.user._id });
     if (!cart)
         return next(new AppError("Can not find cart for this user", 400));
+    
     const totalOrderPrice = cart.totalPriceAfterDiscount || cart.totalPrice;
     const session = await stripe.checkout.sessions.create({
         line_items: [{
