@@ -3,7 +3,6 @@ import AppError from "../../../utils/errorClass.js";
 import orderModel from "../../../database/models/order.model.js";
 import cartModel from "../../../database/models/cart.model.js";
 import Stripe from 'stripe';
-import userModel from "../../../database/models/user.model.js";
 import ApiFeatures from "../../../utils/apiFeaturesClass.js";
 import UpdateProductsCount from "../../../utils/updateProductsCount.js";
 import dotenv from "dotenv"
@@ -98,4 +97,4 @@ const createCheckoutSession = errorAsyncHandler(async (req, res, next) => {
     res.status(200).json({ msg: "Session created successfully", session });
 })
 
-export { createOrder, getAllOrders, getAllUserOrders, createCheckoutSession, createOnlineOrder };
+export { createOrder, getAllOrders, getAllUserOrders, createCheckoutSession };
