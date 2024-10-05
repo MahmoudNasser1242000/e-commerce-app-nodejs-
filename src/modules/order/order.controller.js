@@ -2,26 +2,14 @@ import errorAsyncHandler from "../../../services/errorAsyncHandler.js";
 import AppError from "../../../utils/errorClass.js";
 import orderModel from "../../../database/models/order.model.js";
 import cartModel from "../../../database/models/cart.model.js";
-import productModel from "../../../database/models/product.model.js";
 import Stripe from 'stripe';
-import dotenv from "dotenv"
 import userModel from "../../../database/models/user.model.js";
 import ApiFeatures from "../../../utils/apiFeaturesClass.js";
+import UpdateProductsCount from "../../../utils/updateProductsCount.js";
+import dotenv from "dotenv"
 dotenv.config()
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
-const UpdateProductsCount = async (cart) => {
-    const options = cart.cartItems.map((item) => {
-        return ({
-            updateOne: {
-                "filter": {_id: item.product},
-                "update": {$inc: {sold: item.quantity, stock: -item.quantity}}
-            }
-        })
-    })
-    await productModel.bulkWrite(options)
-}
 
 // @desc      add order
 // @method    POST
