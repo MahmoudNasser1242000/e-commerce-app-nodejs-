@@ -3,6 +3,8 @@ import userModel from '../database/models/user.model.js';
 import errorAsyncHandler from '../services/errorAsyncHandler.js';
 import UpdateProductsCount from './updateProductsCount.js';
 import Stripe from 'stripe';
+import dotenv from "dotenv"
+dotenv.config();
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 

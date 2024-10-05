@@ -20,14 +20,6 @@ orderRouter.post(
     createCheckoutSession
 )
 
-// orderRouter.post(
-//     "/webhooks",
-//     express.raw({ type: 'application/json' }),
-//     createOnlineOrder
-// )
-
-// app.post('/api/webhook/', express.raw({ type: 'application/json' }), );
-
 orderRouter
     .route("/")
     .post(

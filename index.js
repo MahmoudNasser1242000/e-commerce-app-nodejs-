@@ -3,8 +3,8 @@ import AppError from "./utils/errorClass.js";
 import dbconnection from "./database/dbConnection.js";
 import Bootstrap from "./src/bootstrap.js";
 import cors from "cors"
-import dotenv from "dotenv"
 import handleWebhook from "./utils/webhook.js";
+import dotenv from "dotenv"
 dotenv.config();
 
 const app = express();
