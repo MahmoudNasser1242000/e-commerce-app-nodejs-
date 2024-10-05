@@ -11,7 +11,6 @@ const app = express();
 
 app.post('/api/webhook/', express.raw({ type: 'application/json' }), handleWebhook);
 
-
 app.use(express.json())
 app.use("/uploads", express.static("uploads"))
 
