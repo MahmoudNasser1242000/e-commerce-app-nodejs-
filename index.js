@@ -9,7 +9,7 @@ dotenv.config();
 
 const app = express();
 
-app.use('/api/webhook/', express.raw({ type: 'application/json' }), handleWebhook);
+app.post('/api/webhook/', express.raw({ type: 'application/json' }), handleWebhook);
 
 
 app.use(express.json())

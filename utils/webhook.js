@@ -9,7 +9,7 @@ dotenv.config();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const handleWebhook = errorAsyncHandler(async (req, res, next) => {
-    const sig = req.headers['stripe-signature'];
+    const sig = req.headers['stripe-signature'].toString();
 
     let event = stripe.webhooks.constructEvent(req.body, sig, "whsec_BkiGPC8kUjRNuhqN7mvRePsO3ceEYhWg");
 
