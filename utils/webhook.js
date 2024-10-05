@@ -12,9 +12,10 @@ const handleWebhook = errorAsyncHandler(async (req, res, next) => {
     const sig = req.headers['stripe-signature'].toString();
 
     let event = stripe.webhooks.constructEvent(req.body, sig, "whsec_BkiGPC8kUjRNuhqN7mvRePsO3ceEYhWg");
-
+    let checkout;
+    
     if (event.type === "checkout.session.completed") {
-        const checkout = event.data.object;
+        checkout = event.data.object;
 
         let cart = await cartModel.findOne({ _id: checkout.client_reference_id });
         let user = await userModel.findOne({ email: checkout.customer_email });
@@ -34,8 +35,8 @@ const handleWebhook = errorAsyncHandler(async (req, res, next) => {
 
         await cartModel.findOneAndDelete({ _id: checkout.client_reference_id })
 
-        res.status(201).json({ msg: "Order created successfully", checkout });
     }
+    res.status(201).json({ msg: "Order created successfully", checkout });
 }) 
 
 export default handleWebhook;
