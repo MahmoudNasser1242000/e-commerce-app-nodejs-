@@ -6,8 +6,8 @@ import { addBrandSchema, brandIdSchema, updateBrandSchema } from "./brand.valida
 import checkBrandId from "../../middlewares/checkBrandId.js";
 import productRouter from "../product/product.routes.js";
 import protectAuth from "../../middlewares/protectAuth.js";
-import roleAccess from "../../middlewares/RoleAccess.js";
 import checkBrandName from "../../middlewares/checkBrandName.js";
+import roleAccess from "../../middlewares/RoleAccess.js";
 
 const brandRouter = Router({mergeParams: true});
 
