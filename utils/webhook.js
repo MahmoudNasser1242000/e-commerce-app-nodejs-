@@ -9,7 +9,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const handleWebhook = errorAsyncHandler(async (req, res, next) => {
     const sig = req.headers['stripe-signature'];
 
-    let event = stripe.webhooks.constructEvent(req.body, sig, "whsec_hQed6a2FZivxiyEj0HzjvLO4wA02DYKf");
+    let event = stripe.webhooks.constructEvent(req.body, sig, "whsec_BkiGPC8kUjRNuhqN7mvRePsO3ceEYhWg");
 
     if (event.type === "checkout.session.completed") {
         const checkout = event.data.object;
