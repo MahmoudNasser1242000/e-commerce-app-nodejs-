@@ -17,7 +17,7 @@ brandRouter.route("/")
     .post(
         protectAuth,
         roleAccess("admin"),
-        uploadSingle("logo"),
+        uploadSingle("brands", "logo"),
         schemaValidation(addBrandSchema),
         checkBrandName,
         addBrand
@@ -37,7 +37,7 @@ brandRouter.route("/:brand")
     .patch(
         protectAuth,
         roleAccess("admin"),
-        uploadSingle("logo"),
+        uploadSingle("brands", "logo"),
         schemaValidation(updateBrandSchema),
         checkBrandId,
         checkBrandName,

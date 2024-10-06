@@ -81,7 +81,7 @@ userRouter
     .post(
         protectAuth,
         roleAccess("admin"),
-        uploadSingle("profileImg"),
+        uploadSingle("user", "profileImg"),
         schemaValidation(addUserSchema),
         checkUserEmailExist,
         addUser
@@ -93,7 +93,7 @@ userRouter
     .get(protectAuth, roleAccess("admin"), schemaValidation(userIdSchema), checkUserId, getSpecificUser)
     .patch(
         protectAuth,
-        uploadSingle("profileImg"),
+        uploadSingle("user", "profileImg"),
         schemaValidation(updateUserSchema),
         checkUserEmailExist,
         checkUserId,

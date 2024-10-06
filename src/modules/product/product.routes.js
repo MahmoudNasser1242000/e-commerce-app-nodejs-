@@ -15,7 +15,7 @@ productRouter.route("/")
     .post(
         protectAuth,
         roleAccess("admin"),
-        uploadFields([{name: "imgCover", maxCount: 1}, {name: "images", maxCount: 8}]),
+        uploadFields("products", [{name: "imgCover", maxCount: 1}, {name: "images", maxCount: 8}]),
         schemaValidation(addProductSchema),
         checkCategoryId,
         checkSubCategory,
@@ -36,7 +36,7 @@ productRouter.route("/:product")
     .patch(
         protectAuth,
         roleAccess("admin"),
-        uploadFields([{name: "imgCover", maxCount: 1}, {name: "images", maxCount: 8}]),
+        uploadFields("products", [{name: "imgCover", maxCount: 1}, {name: "images", maxCount: 8}]),
         schemaValidation(updateProductSchema),
         checkCategoryId,
         checkSubCategory,

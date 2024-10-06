@@ -44,7 +44,7 @@ categoryRouter
     .post(
         protectAuth,
         roleAccess("admin"),
-        uploadSingle("img"),
+        uploadSingle("categories", "img"),
         schemaValidation(addCategorySchema),
         checkCategoryName,
         addCategorey
@@ -57,7 +57,7 @@ categoryRouter
     .patch(
         protectAuth,
         roleAccess("admin"),
-        uploadSingle("img"),
+        uploadSingle("categories", "img"),
         schemaValidation(updateCategorySchema),
         checkCategoryId,
         checkCategoryName,
