@@ -34,8 +34,9 @@ const getAllProducts = errorAsyncHandler(async (req, res, next) => {
         }
     })
     
+    const collectionLength = (await productModel.find(filterObj)).length
     const apiFeatures = new ApiFeatures(productModel.find(filterObj), req.query)
-        .pagination()
+        .pagination(collectionLength)
         .filter()
         .sort()
         .search()
@@ -43,7 +44,7 @@ const getAllProducts = errorAsyncHandler(async (req, res, next) => {
     const products = await apiFeatures.mongooseQuery;
     res
         .status(200)
-        .json({ length: products.length, page: apiFeatures.page, products });
+        .json({ length: products.length, metadata: apiFeatures.metadata, page: apiFeatures.page, products });
 })
 
 // @desc      get specific product

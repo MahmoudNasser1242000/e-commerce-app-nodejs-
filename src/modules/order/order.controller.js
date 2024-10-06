@@ -39,14 +39,15 @@ const createOrder = errorAsyncHandler(async (req, res, next) => {
 // @route     /api/v1/order/
 // @access    admin
 const getAllOrders = errorAsyncHandler(async (req, res, next) => {
+    const collectionLength = (await orderModel.find()).length
     const apiFeatures = new ApiFeatures(orderModel.find(), req.query)
-        .pagination()
+        .pagination(collectionLength)
         .filter()
         .sort()
         .search()
         .fields();
     let orders = await apiFeatures.mongooseQuery;
-    res.status(200).json({ length: orders.length, page: apiFeatures.page, orders });
+    res.status(200).json({ length: orders.length, metadata: apiFeatures.metadata, page: apiFeatures.page, orders });
 });
 
 // @desc      get my orders
@@ -54,14 +55,15 @@ const getAllOrders = errorAsyncHandler(async (req, res, next) => {
 // @route     /api/v1/order/myOrders
 // @access    public
 const getAllUserOrders = errorAsyncHandler(async (req, res, next) => {
+    const collectionLength = (await brandModel.find({owner: req.user._id})).length
     const apiFeatures = new ApiFeatures(orderModel.find({owner: req.user._id}), req.query)
-        .pagination()
+        .pagination(collectionLength)
         .filter()
         .sort()
         .search()
         .fields();
     let orders = await apiFeatures.mongooseQuery;
-    res.status(200).json({ length: orders.length, page: apiFeatures.page, orders });
+    res.status(200).json({ length: orders.length, metadata: apiFeatures.metadata, page: apiFeatures.page, orders });
 });
 
 // @desc      create checkout session

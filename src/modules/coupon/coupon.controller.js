@@ -26,14 +26,16 @@ const getAllCoupons = errorAsyncHandler(async (req, res, next) => {
     if (req.params.createdBy) {
         filterObj.createdBy = req.params.createdBy
     }
+
+    const collectionLength = (await couponModel.find(filterObj)).length
     const apiFeatures = new ApiFeatures(couponModel.find(filterObj), req.query)
-        .pagination()
+        .pagination(collectionLength)
         .filter()
         .sort()
         .search()
         .fields();
     const coupons = await apiFeatures.mongooseQuery;
-    res.status(200).json({length: coupons.length, page: apiFeatures.page, coupons});
+    res.status(200).json({length: coupons.length, metadata: apiFeatures.metadata, page: apiFeatures.page, coupons});
 })
 
 // @desc      get specific coupon

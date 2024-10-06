@@ -29,8 +29,9 @@ const getAllSubCategories = errorAsyncHandler(async (req, res, next) => {
     if (req.params.createdBy) 
         filterObj.createdBy = req.params.createdBy;
 
+    const collectionLength = (await subCategoryModel.find(filterObj)).length
     const apiFeatures = new ApiFeatures(subCategoryModel.find(filterObj), req.query)
-        .pagination()
+        .pagination(collectionLength)
         .filter()
         .sort()
         .search()
@@ -38,7 +39,7 @@ const getAllSubCategories = errorAsyncHandler(async (req, res, next) => {
     const subCategorys = await apiFeatures.mongooseQuery;
     res
         .status(200)
-        .json({ length: subCategorys.length, page: apiFeatures.page, subCategorys });
+        .json({ length: subCategorys.length, metadata: apiFeatures.metadata, page: apiFeatures.page, subCategorys });
 });
 
 // @desc      get specific subCategory

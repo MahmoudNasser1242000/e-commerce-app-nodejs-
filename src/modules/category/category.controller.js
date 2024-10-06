@@ -27,8 +27,10 @@ const getAllCategories = errorAsyncHandler(async (req, res, next) => {
     if (req.params.createdBy) {
         filterObj.createdBy = req.params.createdBy
     }
+
+    const collectionLength = (await categoryModel.find(filterObj)).length
     const apiFeatures = new ApiFeatures(categoryModel.find(filterObj), req.query)
-        .pagination()
+        .pagination(collectionLength)
         .filter()
         .sort()
         .search()
@@ -36,7 +38,7 @@ const getAllCategories = errorAsyncHandler(async (req, res, next) => {
     const categories = await apiFeatures.mongooseQuery;
     res
         .status(200)
-        .json({ length: categories.length, page: apiFeatures.page, categories });
+        .json({ length: categories.length, metadata: apiFeatures.metadata, page: apiFeatures.page, categories });
 });
 
 // @desc      gat specidic category

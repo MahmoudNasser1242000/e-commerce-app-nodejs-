@@ -4,15 +4,29 @@ class ApiFeatures {
         this.queryString = queryString
     }
 
-    pagination() {
+    pagination(collectionLength) {
+        let metadata = {};
+
         let page = +this.queryString.page || 1;
         if (page <= 0) page = 1;
-        this.page = page
 
         const limit = 4;
+        metadata.limit = limit;
+
+        const totalPages = Math.ceil(collectionLength / limit);
+        if (page > totalPages) page = totalPages;
+        metadata.totalPages = totalPages;
+        metadata.currentPage = page;
+
         const skip = (page - 1) * limit;
 
-        this.mongooseQuery.skip(skip).limit(limit)
+        let nextPage = page + 1;
+        let prevPage = page - 1;
+        if (nextPage <= totalPages) metadata.nextPage = nextPage;
+        if (prevPage > 0) metadata.prevPage = prevPage;
+
+        this.mongooseQuery.skip(skip).limit(limit);
+        this.metadata = metadata
         return this
     }
 

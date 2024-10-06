@@ -24,8 +24,10 @@ const getAllReviews = errorAsyncHandler(async (req, res, next) => {
     if (req.params.createdBy) {
         filterObj.createdBy = req.params.createdBy
     }
+
+    const collectionLength = (await reviewModel.find(filterObj)).length
     const apiFeatures = new ApiFeatures(reviewModel.find(filterObj), req.query)
-        .pagination()
+        .pagination(collectionLength)
         .filter()
         .sort()
         .search()
@@ -33,7 +35,7 @@ const getAllReviews = errorAsyncHandler(async (req, res, next) => {
     const reviews = await apiFeatures.mongooseQuery;
     res
         .status(200)
-        .json({ length: reviews.length, page: apiFeatures.page, reviews });
+        .json({ length: reviews.length, metadata: apiFeatures.metadata, page: apiFeatures.page, reviews });
 })
 
 // @desc      get specific review

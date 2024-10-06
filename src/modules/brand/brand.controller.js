@@ -27,8 +27,11 @@ const getAllBrands = errorAsyncHandler(async (req, res, next) => {
     if (req.params.createdBy) {
         filterObj.createdBy = req.params.createdBy
     }
+
+    const collectionLength = (await brandModel.find(filterObj)).length
+
     const apiFeatures = new ApiFeatures(brandModel.find(filterObj), req.query)
-        .pagination()
+        .pagination(collectionLength)
         .filter()
         .sort()
         .search()
@@ -36,7 +39,7 @@ const getAllBrands = errorAsyncHandler(async (req, res, next) => {
     const brands = await apiFeatures.mongooseQuery;
     res
         .status(200)
-        .json({ length: brands.length, page: apiFeatures.page, brands });
+        .json({ length: brands.length, metadata: apiFeatures.metadata, brands });
 });
 
 // @desc      get specific brand

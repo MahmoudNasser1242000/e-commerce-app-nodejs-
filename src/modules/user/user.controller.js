@@ -20,8 +20,9 @@ const addUser = errorAsyncHandler(async (req, res, next) => {
 // @route     /api/v1/users/
 // @access    admin
 const getAllUsers = errorAsyncHandler(async (req, res, next) => {
+    const collectionLength = (await userModel.find()).length
     const apiFeatures = new ApiFeatures(userModel.find(), req.query)
-        .pagination()
+        .pagination(collectionLength)
         .filter()
         .sort()
         .search()
@@ -29,7 +30,7 @@ const getAllUsers = errorAsyncHandler(async (req, res, next) => {
     const users = await apiFeatures.mongooseQuery;
     res
         .status(200)
-        .json({ length: users.length, page: apiFeatures.page, users });
+        .json({ length: users.length, metadata: apiFeatures.metadata, page: apiFeatures.page, users });
 });
 
 // @desc      get specific user
